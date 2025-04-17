@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  
+  body {
+    background-color: #fdf6e3;
+    padding: 10px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e9f5e9;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+  
+  header h1 {
+    color: green;
+    text-align: center;
+  }
+  
+  .icon-bar button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .hot-spot-page {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .hot-spot-page h2 {
+    color: orange;
+    margin-bottom: 10px;
+  }
+  
+  .hot-spot-feature img {
+    width: 80%;
+    border-radius: 10px;
+    border: 5px solid #f6d365;
+  }
+  
+  .hot-spot-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .carousel-item {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f0f0;
+    margin: 0 5px;
+    border-radius: 10px;
+  }
+  
+  .arrow {
+    background: none;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+  }
+  

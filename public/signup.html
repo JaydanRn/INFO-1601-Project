@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign-Up Page</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    
+<body id="signup-body">
+    <header>
+        <h1>D'Spot</h1>
+    </header>
+
+    <div class="container">
+        <div class="login-box">
+            <h2>Sign Up</h2>
+            <form action="/login">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+
+                <a href="./Home Page/homepage.html" class="signup-btn">Sign Up </a>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
