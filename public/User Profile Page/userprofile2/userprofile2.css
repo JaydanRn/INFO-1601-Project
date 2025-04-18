@@ -1,0 +1,271 @@
+/* === GENERAL === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #F5F1EA;
+    color: #333;
+    display: flex;
+  }
+  
+  /* === SIDEBAR === */
+  .sidebar {
+    width: 200px;
+    background-color: #fff9eb;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar li {
+    padding: 0.8rem 0;
+    color: #ff9900;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .sidebar li a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .sidebar .settings {
+    margin-top: 2rem;
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  /* === MAIN CONTENT === */
+  .main-content {
+    margin-left: 200px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease-in-out;
+  }
+  .sidebar.hidden ~ .main-content {
+    margin-left: 0;
+  }
+  
+  /* === TOPBAR === */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    flex-wrap: wrap;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .app-title {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    cursor: pointer;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex: 1;
+  }
+  .nav-links a {
+    font-weight: bold;
+    color: #ff9900;
+    text-decoration: none;
+  }
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
+  .top-icons button,
+  .top-icons a {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
+
+/* === PROFILE PAGE === */
+.profile-page {
+    padding: 2rem;
+    background-color: #F5F1EA;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .profile-container {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  /* Header */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #FFD60A;
+    background-color: #fff;
+  }
+  
+  .profile-info h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .profile-info p {
+    margin: 0.5rem 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  
+  .edit-btn {
+    background-color: #E63946;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s ease-in-out;
+  }
+  .edit-btn:hover {
+    background-color: #c9283b;
+  }
+  
+  /* Bio & Meta */
+  .profile-bio,
+  .profile-meta {
+    padding-left: 0.5rem;
+  }
+  
+  .profile-bio h3,
+  .profile-meta h4 {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-bio p,
+  .profile-meta p {
+    font-size: 1rem;
+    color: #444;
+    margin: 0.25rem 0;
+    line-height: 1.5;
+  }
+  
+  
+  /* === YOUR SPOTS SECTION (Profile Page) === */
+  .profile-spots {
+    padding-left: 0.5rem;
+    margin-top: 1rem;
+  }
+  .profile-spots h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .spot-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .spot-card {
+    display: flex;
+    gap: 1rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    align-items: flex-start;
+    transition: transform 0.2s ease;
+  }
+  
+  .spot-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .spot-card img {
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .card-info h3 {
+    margin: 0;
+    color: #E63946;
+    font-size: 1.15rem;
+  }
+  
+  .category-tag {
+    display: inline-block;
+    background-color: #FFD60A;
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    width: fit-content;
+  }
+  
+  .rating-location {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .card-info .description {
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.5;
+  }
+  
