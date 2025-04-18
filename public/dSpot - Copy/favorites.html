@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D' Spot | Favorites</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Sidebar (same as other pages) -->
+  <aside class="sidebar hidden" id="sidebar">
+    <nav>
+      <!-- … your nav items … -->
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar (same as other pages) -->
+    <header class="topbar">
+      <!-- … menu toggle & title … -->
+    </header>
+
+    <!-- Favorites Page -->
+    <section class="saved-page">
+      <div class="container">
+        <h2>Favorites</h2>
+        <div class="spot-card-list" id="favoriteList"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Data File -->
+  <script src="favoriteSpots.js"></script>
+
+  <!-- Render Favorites -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const list = document.getElementById("favoriteList");
+
+      if (!favoriteSpots || favoriteSpots.length === 0) {
+        list.innerHTML = '<p style="color:#666;">You haven’t favorited any spots yet.</p>';
+        return;
+      }
+
+      favoriteSpots.forEach(spot => {
+        const card = document.createElement("div");
+        card.classList.add("spot-card");
+        card.innerHTML = `
+          <img src="${spot.image}" alt="${spot.title}" />
+          <div class="card-info">
+            <h3>${spot.title}</h3>
+            <p>⭐️ ${spot.rating} • ${spot.location}</p>
+          </div>
+          <button class="delete-btn">🗑️</button>
+        `;
+        list.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

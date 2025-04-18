@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D' Spot | Profile</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar hidden" id="sidebar">
+    <nav>
+      <ul>
+        <li>Hot Spots</li>
+        <li>Posts</li>
+        <li>Near You</li>
+        <li>Favorites</li>
+        <li><a href="new-spot.html">Create Spot</a></li>
+        <li>Leaderboard</li>
+        <li>FAQs</li>
+      </ul>
+      <div class="settings">⚙️ Settings</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="nav-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <h1 class="app-title" onclick="location.href='index.html'">D’ Spot</h1>
+      </div>
+    </header>
+
+    <!-- Profile Page -->
+    <section class="profile-page">
+      <div class="profile-container">
+        <!-- Header -->
+        <div class="profile-header">
+          <img id="avatar" class="profile-avatar" src="" alt="User Avatar" />
+          <div class="profile-info">
+            <h2 id="username">@username</h2>
+            <p><strong id="badges">0 Badges</strong> • <strong id="posts">0 Posts</strong></p>
+            <button class="edit-btn">✏️ Edit Profile</button>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="profile-bio">
+          <h3>Bio</h3>
+          <p id="bio">Loading bio...</p>
+        </div>
+
+        <!-- Personal Info -->
+        <div class="profile-meta">
+          <h4>Personal Info</h4>
+          <p><strong>Name:</strong> <span id="fullName"></span></p>
+          <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+        </div>
+
+        <!-- Posted Spots -->
+        <div class="profile-spots">
+          <h3>Your Spots</h3>
+          <div class="spot-card-list" id="userSpotList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Data Files -->
+  <script src="user.js"></script>
+  <script src="postedSpots.js"></script>
+
+  <!-- JS Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Sidebar toggle
+      const toggleBtn = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('sidebar');
+      const main = document.querySelector('.main-content');
+
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+        main.classList.toggle('full-width');
+      });
+
+      // Load user profile info
+      document.getElementById("username").textContent = "@" + userProfile.username;
+      document.getElementById("badges").textContent = `${userProfile.badges} Badges`;
+      document.getElementById("posts").textContent = `${userProfile.posts} Posts`;
+      document.getElementById("avatar").src = userProfile.avatar;
+      document.getElementById("bio").textContent = userProfile.bio;
+      document.getElementById("fullName").textContent = userProfile.fullName;
+      document.getElementById("dob").textContent = userProfile.dob;
+
+      // Render posted spots
+      const spotList = document.getElementById("userSpotList");
+
+      if (postedSpots.length === 0) {
+        spotList.innerHTML = `<p style="color:#666;">You haven't posted any spots yet.</p>`;
+      } else {
+        postedSpots.forEach(spot => {
+          const card = document.createElement("div");
+          card.classList.add("spot-card");
+          card.innerHTML = `
+            <img src="${spot.image}" alt="${spot.title}" />
+            <div class="card-info">
+              <h3>${spot.title}</h3>
+              <span class="category-tag">${spot.category}</span>
+              <p class="rating-location">⭐ ${spot.rating} • ${spot.location}</p>
+              <p class="description">${spot.description}</p>
+            </div>
+          `;
+          spotList.appendChild(card);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

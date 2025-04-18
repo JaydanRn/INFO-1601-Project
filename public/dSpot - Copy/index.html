@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>D' Spot | Homepage</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+</head>
+<body>
+    
+  <!-- Sidebar -->
+  <aside class="sidebar hidden" id="sidebar">
+    <nav>
+      <ul>
+        <li>Hot Spots</li>
+        <li>Posts</li>
+        <li>Near You</li>
+        <li>Favorites</li>
+        <li><a href="new-spot.html">Create Spot</a></li>
+        <li>Leaderboard</li>
+        <li>FAQs</li>
+      </ul>
+      <div class="settings">⚙️ Settings</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <header class="topbar">
+      <div class="nav-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <h1 class="app-title" onclick="location.href='index.html'">D’ Spot</h1>
+      </div>
+
+      <div class="nav-links">
+        <a href="#">Favorites</a>
+        <a href="new-spot.html">Create</a>
+        <a href="#">Leaderboard</a>
+        <a href="#">FAQs</a>
+      </div>
+
+      <div class="top-icons">
+        <button title="Random Spot">✨</button>
+        <a href="profile.html" title="Profile">👤</a>
+      </div>
+    </header>
+
+    <!-- Search -->
+    <div class="search-area">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <button class="search-btn">Search</button>
+    </div>
+
+    <!-- Map Area -->
+    <div class="map-placeholder">
+      [ Google Map will go here ]
+    </div>
+
+    <!-- Featured Spots Carousel -->
+    <section class="carousel">
+      <button class="carousel-btn" id="prevBtn">←</button>
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-btn" id="nextBtn">→</button>
+    </section>
+  </div>
+
+  <!-- Data File -->
+  <script src="spots.js"></script>
+
+  <!-- Main Script -->
+  <script>
+    // Sidebar Toggle
+    const toggleBtn = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const main = document.querySelector('.main-content');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      main.classList.toggle('full-width');
+    });
+
+    // Carousel Scroll
+    const track = document.getElementById('carouselTrack');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const itemWidth = 180;
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: itemWidth, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+    });
+
+    // Auto-scroll every 3 seconds
+    setInterval(() => {
+      track.scrollBy({ left: itemWidth, behavior: 'smooth' });
+
+      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - itemWidth) {
+        setTimeout(() => {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        }, 1000);
+      }
+    }, 3000);
+
+    // Populate carousel from featuredSpots
+    featuredSpots.forEach(spot => {
+      const item = document.createElement('div');
+      item.classList.add('carousel-item');
+      item.innerHTML = `
+        <img src="${spot.image}" alt="${spot.title}" />
+        <p>${spot.title}</p>
+      `;
+      track.appendChild(item);
+    });
+  </script>
+</body>
+</html>
+
+
