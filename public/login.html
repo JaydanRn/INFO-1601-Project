@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body id="login-body">
     <header>
@@ -25,7 +25,7 @@
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
                 
-                <a href="./Home Page/homepage.html" class="login-btn">LOGIN to D'Spot </a>
+                <button type="submit" class="login-btn">LOGIN to D'Spot</button>
             </form>
 
             <div class="signup-prompt">
@@ -55,16 +55,15 @@
         }
     });
 
-        import { registerUser } from './data.js';
+        import { registerUser } from './auth.js';
 
         document.querySelector('.signup-link').addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('username').value; // Assuming 'username' is the email field
             const password = document.getElementById('password').value;
-            const username = document.getElementById('username').value; // Add a username field if needed
 
             try {
-                const user = await registerUser(email, password, username);
+                const user = await registerUser(email, password);
                 console.log("Registration successful:", user);
                 // Redirect to login.html
                 window.location.href = "./login.html";
