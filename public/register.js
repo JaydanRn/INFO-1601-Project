@@ -1,11 +1,16 @@
 import firebaseConfig from "./firebaseConfig.js"; 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+<<<<<<< HEAD
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
  
+=======
+
+>>>>>>> 52f54e1a3d047e5bf697da38b98db3b5b18fb939
 const app = initializeApp(firebaseConfig);
 const signUp = document.getElementById("submit");
 
+<<<<<<< HEAD
 signUp.addEventListener("click", function(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
@@ -42,6 +47,16 @@ signUp.addEventListener("click", function(event) {
 /*
 const submit = document.getElementById("submitSignUp");
 const auth = getAuth(app); // Initialize Firebase Authentication
+=======
+// Generate default username (e.g., "user" + random number)
+function generateDefaultUsername(email) {
+  const prefix = email.split('@')[0] || 'user';
+  const randomNum = Math.floor(Math.random() * 10000);
+  return `${prefix}${randomNum}`.toLowerCase();
+}
+
+const submit = document.getElementById("submit");
+>>>>>>> 52f54e1a3d047e5bf697da38b98db3b5b18fb939
 submit.addEventListener("click", function(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
