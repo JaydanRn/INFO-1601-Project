@@ -1,9 +1,16 @@
 import firebaseConfig from "./firebaseConfig.js"; 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
- 
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// Generate default username (e.g., "user" + random number)
+function generateDefaultUsername(email) {
+  const prefix = email.split('@')[0] || 'user';
+  const randomNum = Math.floor(Math.random() * 10000);
+  return `${prefix}${randomNum}`.toLowerCase();
+}
 
 const submit = document.getElementById("submit");
 submit.addEventListener("click", function(event) {
