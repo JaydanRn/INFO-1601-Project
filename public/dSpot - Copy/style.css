@@ -378,8 +378,64 @@ body {
   margin-bottom: 1rem;
 }
 
+/* === New Spot Page Styles === */
+.form-section {
+  padding: 2rem;
+  background-color: #F5F1EA;
+}
 
+.form-section h2 {
+  font-family: 'Poppins', sans-serif;
+  color: #E63946;
+  margin-bottom: 1rem;
+}
 
+/* this is the magic that stacks your labels and inputs vertically */
+.add-spot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.add-spot-form label {
+  display: block;              /* force label to its own line */
+  font-weight: bold;
+}
+
+.add-spot-form input,
+.add-spot-form select,
+.add-spot-form textarea {
+  width: 100%;                 /* full-width inputs */
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Inter', sans-serif;
+}
+
+.add-spot-form textarea {
+  resize: vertical;
+}
+
+.add-spot-form button {
+  align-self: flex-start;      /* don’t stretch the button full-width */
+  background-color: #E63946;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-spot-form button:hover {
+  background-color: #c9283b;
+}
 
 
   
