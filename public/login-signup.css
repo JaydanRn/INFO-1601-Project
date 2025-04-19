@@ -95,7 +95,7 @@ header p {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.login-btn, .signup-btn{
+#login-btn, #submit{
     width: 100%;
     padding: 12px;
     background-color: orange;
@@ -112,7 +112,7 @@ header p {
     align-items: center
 }
 
-.login-btn:hover, .signup-btn:hover {
+#login-btn:hover, #submit{
     background-color: orangered;
 }
 
