@@ -112,7 +112,7 @@ header p {
     align-items: center
 }
 
-#login-btn:hover, #submit{
+#login-btn:hover, #submit:hover {
     background-color: orangered;
 }
 
