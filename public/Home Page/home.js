@@ -142,7 +142,7 @@ function populateCarousel(spots = featuredSpots) {
 
 // Function to redirect to the spot detail page
 window.viewSpotDetails = function (spotId) {
-    // Redirect to the spotdetail.html page with the spot ID as a query parameter
+    // Redirect to the spot-detail.html page with the spot ID as a query parameter
     window.location.href = `../newspot-spotdetail/spot-detail.html?spotId=${spotId}`;
 };
 

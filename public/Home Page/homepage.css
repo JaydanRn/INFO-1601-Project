@@ -373,3 +373,70 @@ body {
   transform: none;
   box-shadow: none;
 }
+
+/* Center the map-placeholder */
+.map-placeholder {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically (if needed) */
+  text-align: center; /* Center text inside the placeholder */
+  margin: 20px auto; /* Add some spacing and center the element */
+  min-height: 100px; /* Optional: Set a minimum height */
+  background-color: #f9f9f9; /* Optional: Add a background color */
+  border: 1px solid #ddd; /* Optional: Add a border */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+}
+
+.placeholder-message {
+  font-size: 1.8rem; /* Enlarged text */
+  color: #E63946; /* Brand red color */
+  font-weight: 600;
+  text-align: center;
+  padding: 2rem;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  animation: floatText 3s ease-in-out infinite;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+/* Floating text animation */
+@keyframes floatText {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+    text-shadow: 2px 4px 6px rgba(0,0,0,0.15);
+  }
+}
+
+/* Hover effects */
+.map-placeholder:hover .placeholder-message {
+  color: #c1121f; /* Darker red on hover */
+  animation: floatText 2s ease-in-out infinite; /* Faster animation on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .placeholder-message {
+    font-size: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .placeholder-message {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+  
+  @keyframes floatText {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.01); }
+  }
+}
+

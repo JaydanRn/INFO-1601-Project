@@ -1,50 +1,53 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 // Get the spot ID from the query parameter
 const urlParams = new URLSearchParams(window.location.search);
 const spotId = urlParams.get("spotId");
 
-// Add favorite functionality
-async function addToFavorites(userId, spotId) {
+// Fetch and display the spot details
+async function fetchSpotDetails() {
+    if (!spotId) {
+        document.querySelector(".spot-detail").innerHTML = "<p>Invalid spot ID.</p>";
+        return;
+    }
+
     try {
-        const userFavoritesRef = doc(db, "favorites", userId);
-
-        // Check if the user already has a favorites document
-        const docSnapshot = await getDoc(userFavoritesRef);
-        if (docSnapshot.exists()) {
-            // Update the existing document by adding the spot ID to the array
-            await updateDoc(userFavoritesRef, {
-                spotIds: arrayUnion(spotId)
-            });
+        const spotDoc = await getDoc(doc(db, "spots", spotId));
+        if (spotDoc.exists()) {
+            const spotData = spotDoc.data();
+            displaySpotDetails(spotData);
         } else {
-            // Create a new document with the spot ID
-            await setDoc(userFavoritesRef, {
-                spotIds: [spotId]
-            });
+            document.querySelector(".spot-detail").innerHTML = "<p>Spot not found.</p>";
         }
-
-        alert("Spot added to favorites!");
     } catch (error) {
-        console.error("Error adding to favorites:", error);
-        alert("Failed to add to favorites. Please try again.");
+        console.error("Error fetching spot details:", error);
+        document.querySelector(".spot-detail").innerHTML = "<p>Failed to load spot details. Please try again later.</p>";
     }
 }
 
-// Handle the favorite button click
-document.getElementById("favorite-btn").addEventListener("click", () => {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            addToFavorites(user.uid, spotId); // Pass the user's ID and the spot ID
-        } else {
-            alert("You must be logged in to favorite a spot.");
-        }
-    });
-});
+// Function to display the spot details on the page
+function displaySpotDetails(spotData) {
+    // Update the spot name
+    document.querySelector(".detail-info h2").textContent = spotData.name || "Spot Name";
+
+    // Update the location
+    document.querySelector(".location").textContent = `📍 ${spotData.location || "Location not available"}`;
+
+    // Update the rating
+    document.querySelector(".rating").textContent = `⭐️ ${spotData.rating || "N/A"}`;
+
+    // Update the description
+    document.querySelector(".description").textContent = spotData.description || "No description available.";
+
+    // Update the category
+    document.querySelector(".category").textContent = `Category: ${spotData.category || "N/A"}`;
+}
+
+// Call the function to fetch and display spot details
+fetchSpotDetails();

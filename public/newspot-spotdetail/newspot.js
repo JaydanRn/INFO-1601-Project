@@ -37,7 +37,7 @@ document.getElementById("addspot").addEventListener("click", async (event) => {
         category: category,
         rating: parseFloat(rating),
         description: description,
-        createdAt: new Date().toISOString() // Add a timestamp
+        createdAt: new Date(),
     };
 
     try {

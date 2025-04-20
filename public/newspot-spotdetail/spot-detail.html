@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>D' Spot | Spot Detail</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="spotdetail.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Header (reused) -->
   <header>
     <div class="logo">
-      <img src="assets/logo.svg" alt="D' Spot Logo" class="logo-img">
-      <h1>D’ Spot</h1>
+      <h1 class="app-title" onclick="location.href='../Home Page/homepage.html'">D’ Spot</h1>
     </div>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="spot-detail.html">Create</a></li>
-        <li><a href="saved.html">Saved</a></li>
+        <li><a href="../Home Page/homepage.html">Home</a></li>
+        <li><a href="../newspot-spotdetail/newspot.html">Create</a></li>
+        <li><a href="../Favorites/favorites.html">Favourites</a></li>
         <li><a href="profile.html">Profile</a></li>
       </ul>
     </nav>
@@ -25,21 +24,19 @@
 
   <!-- Spot Detail Section -->
   <section class="spot-detail">
-    <img src="assets/images/doubles.jpg" alt="Doubles Vendor" class="detail-img">
-
     <div class="detail-info">
-      <h2>Doubles by Junction</h2>
-      <p class="rating">⭐️ 4.9 • 0.7 miles away</p>
-      <p class="description">
-        This doubles vendor is a must-visit! Super fresh bara, hot pepper, and perfectly seasoned channa. Located right by the Curepe Junction.
-      </p>
+        <h2>Spot Name</h2>
+        <p class="location">📍 Location will appear here</p>
+        <p class="rating">⭐️ Rating will appear here</p>
+        <p class="description">Description of the spot will appear here.</p>
+        <p class="category">Category: Category will appear here</p>
 
-      <div class="action-buttons">
-        <button class="primary-btn">❤️ Favourite</button>
-        <button class="secondary-btn">📍 Get Directions</button>
-      </div>
+        <div class="action-buttons">
+            <button class="primary-btn">❤️ Favourite</button>
+            <button class="secondary-btn">📍 Get Directions</button>
+        </div>
     </div>
-  </section>
+</section>
 
   <!-- Comments -->
   <section class="comments">
