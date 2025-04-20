@@ -5,57 +5,49 @@
   <title>D' Spot | Favorites</title>
   <link rel="stylesheet" href="favorites.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <script type="module" src="favoriteSpots.js" defer></script>
 </head>
 <body>
-  <!-- Sidebar (same as other pages) -->
-  <aside class="sidebar hidden" id="sidebar">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
     <nav>
-      <!-- … your nav items … -->
+      <ul>
+        <li><a href="../Home Page/homepage.html">Home</a></li>
+        <li><a href="../newspot-spotdetail/newspot.html">Create</a></li>
+        <li><a href="../Favorites/favorites.html" class="active">Favorites</a></li>
+        <li><a href="../Profile/profile.html">Profile</a></li>
+      </ul>
     </nav>
   </aside>
 
   <!-- Main Content -->
   <div class="main-content">
-    <!-- Topbar (same as other pages) -->
+    <!-- Topbar -->
     <header class="topbar">
-      <!-- … menu toggle & title … -->
+      <button id="menuToggle" class="menu-toggle">☰</button>
+      <h1>Favorites</h1>
     </header>
 
     <!-- Favorites Page -->
     <section class="saved-page">
       <div class="container">
         <h2>Favorites</h2>
-        <div class="spot-card-list" id="favoriteList"></div>
+        <div class="spot-card-list" id="favoriteList">
+          <p style="color:#666;">Loading your favorites...</p>
+        </div>
       </div>
     </section>
   </div>
 
-  <!-- Data File -->
-  <script src="favoriteSpots.js"></script>
-
-  <!-- Render Favorites -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const list = document.getElementById("favoriteList");
+    // Sidebar toggle functionality
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main-content");
 
-      if (!favoriteSpots || favoriteSpots.length === 0) {
-        list.innerHTML = '<p style="color:#666;">You haven’t favorited any spots yet.</p>';
-        return;
-      }
-
-      favoriteSpots.forEach(spot => {
-        const card = document.createElement("div");
-        card.classList.add("spot-card");
-        card.innerHTML = `
-          <img src="${spot.image}" alt="${spot.title}" />
-          <div class="card-info">
-            <h3>${spot.title}</h3>
-            <p>⭐️ ${spot.rating} • ${spot.location}</p>
-          </div>
-          <button class="delete-btn">🗑️</button>
-        `;
-        list.appendChild(card);
-      });
+    menuToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("hidden");
+      mainContent.classList.toggle("full-width");
     });
   </script>
 </body>

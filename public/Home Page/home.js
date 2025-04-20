@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
@@ -145,6 +146,21 @@ window.viewSpotDetails = function (spotId) {
     // Redirect to the spot-detail.html page with the spot ID as a query parameter
     window.location.href = `../newspot-spotdetail/spot-detail.html?spotId=${spotId}`;
 };
+
+// Initialize Firebase Auth
+const auth = getAuth();
+
+// Logout functionality
+document.getElementById("logout-btn").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        alert("You have been logged out.");
+        window.location.href = "../login.html"; // Redirect to the login page
+    } catch (error) {
+        console.error("Error logging out:", error);
+        alert("Failed to log out. Please try again.");
+    }
+});
 
 // Add event listener to the search button
 document.getElementById("search-btn").addEventListener("click", searchSpots);

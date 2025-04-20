@@ -6,7 +6,6 @@ import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
 document.getElementById("addspot").addEventListener("click", async (event) => {
     event.preventDefault();
 
@@ -37,7 +36,7 @@ document.getElementById("addspot").addEventListener("click", async (event) => {
         category: category,
         rating: parseFloat(rating),
         description: description,
-        createdAt: new Date(),
+        createdAt: new Date(), // Add a timestamp
     };
 
     try {
@@ -46,6 +45,9 @@ document.getElementById("addspot").addEventListener("click", async (event) => {
     
         // Add a new document with the generated ID
         await setDoc(doc(db, "spots", spotId), spotData);
+
+        // Initialize an empty comments document for the spot
+        await setDoc(doc(db, "comments", spotId), {}); // Create an empty document in the 'comments' collection
     
         console.log("Document written with ID: ", spotId);
     

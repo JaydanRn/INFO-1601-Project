@@ -5,6 +5,7 @@
   <title>D' Spot | Spot Detail</title>
   <link rel="stylesheet" href="spotdetail.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <script type="module" src="spotdetail.js" defer></script>
 </head>
 <body>
   <!-- Header (reused) -->
@@ -22,40 +23,48 @@
     </nav>
   </header>
 
-  <!-- Spot Detail Section -->
   <section class="spot-detail">
-    <div class="detail-info">
-        <h2>Spot Name</h2>
-        <p class="location">📍 Location will appear here</p>
-        <p class="rating">⭐️ Rating will appear here</p>
-        <p class="description">Description of the spot will appear here.</p>
-        <p class="category">Category: Category will appear here</p>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loading-spinner">
+        <p>Loading spot details...</p>
+    </div>
 
-        <div class="action-buttons">
-            <button class="primary-btn">❤️ Favourite</button>
-            <button class="secondary-btn">📍 Get Directions</button>
+    <div class="spot-container" id="spot-container" style="display: none;">
+        <!-- Image Section -->
+        <div class="spot-image">
+            <img src="../assets/images/pie.jpg" alt="Spot Image" class="detail-img">
+        </div>
+
+        <!-- Details Section -->
+        <div class="detail-info">
+            <h2>Spot Name</h2>
+            <p class="location">📍 Location will appear here</p>
+            <p class="rating">⭐️ Rating will appear here</p>
+            <p class="description">Description of the spot will appear here.</p>
+            <p class="category">Category: Category will appear here</p>
+
+            <div class="action-buttons">
+              <button class="primary-btn" id="favorite-btn">❤️ Favourite</button>
+          </div>
         </div>
     </div>
 </section>
 
-  <!-- Comments -->
+<section class="comments">
+  <h3>Comments</h3>
+
+  <!-- Comments will be dynamically added here -->
   <section class="comments">
     <h3>Comments</h3>
+    <!-- Comments and input form will be dynamically added here -->
+</section>
 
-    <div class="comment">
-      <p><strong>@trinifoodie:</strong> This doubles changed my life 😭🔥</p>
-    </div>
-
-    <div class="comment">
-      <p><strong>@limequeen:</strong> I reach late and they were sold out 😭</p>
-    </div>
-
-    <!-- Add Comment -->
-    <form class="comment-form">
+  <!-- Add Comment -->
+  <form class="comment-form">
       <input type="text" placeholder="Leave a comment…" />
       <button type="submit">Post</button>
-    </form>
-  </section>
+  </form>
+</section>
 
   <!-- Footer -->
   <footer>
