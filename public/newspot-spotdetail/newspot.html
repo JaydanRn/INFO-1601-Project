@@ -5,6 +5,7 @@
   <title>D' Spot | Add Spot</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <script type="module" src="spot.js" defer></script>
 </head>
 <body>
   <!-- Header -->
@@ -26,15 +27,19 @@
   <!-- Add Spot Form -->
   <section class="form-section">
     <h2>Add a New Spot</h2>
-    <form class="add-spot-form">
-      <label for="image">Upload Picture</label>
+    <form class="add-spot-form" id="addspotform">
+      <!--<label for="image">Upload Picture</label>
       <input type="file" id="image" name="image" accept="image/*" />
-
+    -->
       <label for="name">Spot Name</label>
       <input type="text" id="name" name="name" placeholder="e.g., Roti King" required />
 
       <label for="location">Location</label>
       <input type="text" id="location" name="location" placeholder="e.g., Curepe Junction" required />
+
+      <label for="embed">Embed</label>
+      <input type="text" id="embed" name="embed" placeholder="e.g., <iframe src=" required />
+
 
       <label for="category">Category</label>
       <select id="category" name="category">
@@ -51,7 +56,7 @@
       <label for="description">Description</label>
       <textarea id="description" name="description" rows="4" placeholder="Tell us about the vibe, food, and service!"></textarea>
 
-      <button type="submit" class="primary-btn">➕ Add Spot</button>
+      <button type="submit" id="addspot" class="primary-btn">➕ Add Spot</button>
     </form>
   </section>
 

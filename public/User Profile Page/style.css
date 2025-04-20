@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #fffbe6;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e9f5e9;
+  padding: 15px 25px;
+  border-radius: 0 0 10px 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  color: green;
+  font-size: 24px;
+}
+
+.icon-bar button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+/* Navigation bar */
+.profile-nav {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 60px;
+  z-index: 9;
+}
+
+.profile-nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.profile-nav a:hover {
+  color: orange;
+}
+
+/* Hide navbar on small screens */
+@media (max-width: 600px) {
+  .profile-nav {
+    display: none;
+  }
+}
+
+.user-profile-page {
+  padding: 25px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.profile-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.user-info {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  color: orange;
+}
+
+.badges {
+  font-size: 14px;
+  color: green;
+}
+
+.edit-button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+section {
+  margin-top: 30px;
+}
+
+.bio textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  margin-top: 10px;
+}
+
+.personal-info p,
+.user-posts p,
+.user-badges p {
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+  
