@@ -10,12 +10,25 @@ const db = getFirestore(app);
 document.getElementById("addspot").addEventListener("click", async (event) => {
     event.preventDefault();
 
-    const spotName = document.getElementById("name").value;
-    const location = document.getElementById("location").value;
-    const embed = document.getElementById("embed").value;
-    const category = document.getElementById("category").value;
-    const rating = document.getElementById("rating").value;
-    const description = document.getElementById("description").value;
+    // Get form values
+    const spotName = document.getElementById("name").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const embed = document.getElementById("embed").value.trim();
+    const category = document.getElementById("category").value.trim();
+    const rating = document.getElementById("rating").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    // Check if all fields are filled
+    if (!spotName || !location || !embed || !category || !rating || !description) {
+        alert("Please fill out all fields before submitting.");
+        return;
+    }
+
+    // Validate rating is a number
+    if (isNaN(parseFloat(rating)) || parseFloat(rating) < 0 || parseFloat(rating) > 5) {
+        alert("Please enter a valid rating between 0 and 5.");
+        return;
+    }
 
     const spotData = {
         name: spotName,
