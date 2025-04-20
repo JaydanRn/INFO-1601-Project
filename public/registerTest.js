@@ -20,7 +20,7 @@ function generateDefaultUsername(email) {
   return `${prefix}${randomNum}`;
 }
 
-document.getElementById("signup-form").addEventListener("submit", async (event) => {
+document.getElementById("submit").addEventListener("click", async (event) => {
   event.preventDefault();
 
   const email = document.getElementById("signup-email").value;
@@ -43,7 +43,7 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
       lastLogin: new Date()
     });
 
-    alert(Registration successful! Your username is: ${username});
+    alert(`Registration successful! Your username is: ${username}`);
     window.location.href = "login.html";
   } catch (error) {
     console.error("Registration error:", error);
