@@ -1,123 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>D' Spot | Homepage</title>
-  <link rel="stylesheet" href="homepage.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D' Spot | Homepage</title>
+    <link rel="stylesheet" href="homepage.css" />
+    <script type="module" src="spots.js" defer></script>
 </head>
 <body>
-    
-  <!-- Sidebar -->
-  <aside class="sidebar hidden" id="sidebar">
-    <nav>
-      <ul>
-        <li>Hot Spots</li>
-        <li>Posts</li>
-        <li>Near You</li>
-        <li><a href="../Favorites/favorites.html">Favorites</a></li>
-        <li><a href="../newspot-spotdetail/newspot.html">Create Spot</a></li>
-        <li>Leaderboard</li>
-        <li>FAQs</li>
-      </ul>
-      <div class="settings">⚙️ Settings</div>
-    </nav>
-  </aside>
+    <!-- Sidebar -->
+    <aside class="sidebar hidden" id="sidebar">
+        <nav>
+            <ul>
+                <li>Hot Spots</li>
+                <li>Posts</li>
+                <li>Near You</li>
+                <li><a href="../Favorites/favorites.html">Favorites</a></li>
+                <li><a href="../newspot-spotdetail/newspot.html">Create Spot</a></li>
+                <li>Leaderboard</li>
+                <li>FAQs</li>
+            </ul>
+            <div class="settings">⚙️ Settings</div>
+        </nav>
+    </aside>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Top Navigation -->
-    <header class="topbar">
-      <div class="nav-left">
-        <button class="menu-toggle" id="menuToggle">☰</button>
-        <h1 class="app-title" onclick="location.href='index.html'">D’ Spot</h1>
-      </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <header class="topbar">
+            <div class="nav-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="app-title" onclick="location.href='index.html'">D’ Spot</h1>
+            </div>
 
-      <div class="nav-links">
-        <a href="../Favorites/favorites.html">Favorites</a>
-        <a href="../newspot-spotdetail/newspot.html">Create</a>
-        <a href="#">Leaderboard</a>
-        <a href="#">FAQs</a>
-      </div>
+            <div class="nav-links">
+                <a href="../Favorites/favorites.html">Favorites</a>
+                <a href="../newspot-spotdetail/newspot.html">Create</a>
+                <a href="#">Leaderboard</a>
+                <a href="#">FAQs</a>
+            </div>
 
-      <div class="top-icons">
-        <button title="Random Spot">✨</button>
-        <a href="#" title="Profile">👤</a>
-      </div>
-    </header>
+            <div class="top-icons">
+                <button title="Random Spot">✨</button>
+                <a href="#" title="Profile">👤</a>
+            </div>
+        </header>
 
-    <!-- Search -->
-    <div class="search-area">
-      <input type="text" placeholder="Search..." class="search-input" />
-      <button class="search-btn">Search</button>
+        <!-- Search -->
+        <div class="search-area">
+            <input type="text" placeholder="Search..." class="search-input" />
+            <button class="search-btn">Search</button>
+        </div>
+
+        <!-- Map Placeholder -->
+        <div class="map-placeholder" id="map-placeholder">
+            
+        </div>
+
+        <!-- Featured Spots Carousel -->
+        <section class="carousel">
+            <button class="carousel-btn" id="prevBtn">←</button>
+            <div class="carousel-track" id="carouselTrack"></div>
+            <button class="carousel-btn" id="nextBtn">→</button>
+        </section>
     </div>
-    
-    <div class="map-placeholder" >
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1003643.0575414391!2d-61.87120950627947!3d10.697357855541963!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c3607976350b6c5%3A0xff082855c639f127!2sTrinidad%20and%20Tobago!5e0!3m2!1sen!2stt!4v1745109290548!5m2!1sen!2stt" width="600" height="375" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <!-- Map Area -->
-    </div>
-    
-    
-    <!-- Featured Spots Carousel -->
-    <section class="carousel">
-      <button class="carousel-btn" id="prevBtn">←</button>
-      <div class="carousel-track" id="carouselTrack"></div>
-      <button class="carousel-btn" id="nextBtn">→</button>
-    </section>
-  </div>
-
-  <!-- Data File -->
-  <script src="spots.js"></script>
-
-  <!-- Main Script -->
-  <script>
-    // Sidebar Toggle
-    const toggleBtn = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const main = document.querySelector('.main-content');
-
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('hidden');
-      main.classList.toggle('full-width');
-    });
-
-    // Carousel Scroll
-    const track = document.getElementById('carouselTrack');
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const itemWidth = 180;
-
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: itemWidth, behavior: 'smooth' });
-    });
-
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -itemWidth, behavior: 'smooth' });
-    });
-
-    // Auto-scroll every 3 seconds
-    setInterval(() => {
-      track.scrollBy({ left: itemWidth, behavior: 'smooth' });
-
-      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - itemWidth) {
-        setTimeout(() => {
-          track.scrollTo({ left: 0, behavior: 'smooth' });
-        }, 1000);
-      }
-    }, 3000);
-
-    // Populate carousel from featuredSpots
-    featuredSpots.forEach(spot => {
-      const item = document.createElement('div');
-      item.classList.add('carousel-item');
-      item.innerHTML = `
-        <img src="${spot.image}" alt="${spot.title}" />
-        <p>${spot.title}</p>
-      `;
-      track.appendChild(item);
-    });
-  </script>
 </body>
 </html>
-
-
