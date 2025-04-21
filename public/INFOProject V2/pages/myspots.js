@@ -1,5 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  doc, 
+  deleteDoc, 
+  updateDoc,
+  deleteField
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "/public/firebaseConfig.js";
 
@@ -11,6 +21,12 @@ const auth = getAuth(app);
 let allSpots = [];
 let currentPage = 0;
 const perPage = 5;
+let deleteId = null;
+
+// DOM Elements
+const modal = document.getElementById("delete-modal");
+const cancelBtn = document.getElementById("cancel-delete");
+const confirmBtn = document.getElementById("confirm-delete");
 
 // Fetch spots posted by the logged-in user
 async function fetchSpots(userId) {
@@ -31,7 +47,6 @@ function renderPage() {
   const listEl = document.getElementById("spots-list");
   const emptyState = document.getElementById("empty-state");
   
-  // Clear existing spots
   listEl.innerHTML = "";
   
   if (allSpots.length === 0) {
@@ -71,68 +86,99 @@ function renderPage() {
   }
 }
 
-// Initialize the page
-async function init() {
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      allSpots = await fetchSpots(user.uid);
-      renderPage();
-    } else {
-      alert("You must be logged in to view your spots.");
-      window.location.href = "login.html";
-    }
-  });
+// Delete spot and all associated data
+async function deleteSpotAndAssociatedData(spotId, userId) {
+  try {
+    // 1. Delete the spot document
+    await deleteDoc(doc(db, "spots", spotId));
+    
+    // 2. Delete the comments for this spot
+    await deleteDoc(doc(db, "comments", spotId));
+    
+    // 3. Remove from all users' favorites
+    const favoritesQuery = query(collection(db, "favorites"));
+    const favoritesSnapshot = await getDocs(favoritesQuery);
+    
+    const updatePromises = [];
+    favoritesSnapshot.forEach((doc) => {
+      if (doc.data().spots && doc.data().spots[spotId]) {
+        updatePromises.push(
+          updateDoc(doc.ref, {
+            [`spots.${spotId}`]: deleteField()
+          })
+        );
+      }
+    });
+    
+    await Promise.all(updatePromises);
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting spot and associated data:", error);
+    return false;
+  }
 }
 
-// Handle "Load More" button click
-document.getElementById("load-more").addEventListener("click", () => {
-  currentPage++;
-  renderPage();
-});
-
-// === Delete Modal & Toast ===
-let deleteId = null;
-const modal = document.getElementById("delete-modal");
-const cancelBtn = document.getElementById("cancel-delete");
-const confirmBtn = document.getElementById("confirm-delete");
-
+// Handle delete button clicks
 document.getElementById("spots-list").addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
-  const id = btn.closest(".card").dataset.id;
+  
+  const card = btn.closest(".card");
+  const id = card.dataset.id;
+  
   if (btn.dataset.action === "delete") {
     deleteId = id;
     modal.classList.add("open");
   }
+  
   if (btn.dataset.action === "edit") {
-    inlineEdit(btn.closest(".card"));
+    inlineEdit(card);
   }
 });
 
+// Handle delete confirmation
+confirmBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("You must be logged in to delete spots.");
+    return;
+  }
+
+  try {
+    const success = await deleteSpotAndAssociatedData(deleteId, user.uid);
+    
+    if (success) {
+      // Update local state
+      allSpots = allSpots.filter((s) => s.id !== deleteId);
+      
+      // Update UI
+      document.querySelector(`.card[data-id="${deleteId}"]`)?.remove();
+      modal.classList.remove("open");
+      deleteId = null;
+      
+      showToast("Spot and all associated data deleted");
+      
+      // Show empty state if no spots left
+      if (allSpots.length === 0) {
+        renderPage();
+      }
+    } else {
+      alert("Failed to completely delete spot data. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error during deletion:", error);
+    alert("An error occurred during deletion. Please try again.");
+  }
+});
+
+// Cancel delete
 cancelBtn.addEventListener("click", () => {
   modal.classList.remove("open");
   deleteId = null;
 });
 
-confirmBtn.addEventListener("click", async () => {
-  try {
-    await deleteDoc(doc(db, "spots", deleteId));
-    document.querySelector(`.card[data-id="${deleteId}"]`).remove();
-    allSpots = allSpots.filter((s) => s.id !== deleteId);
-    modal.classList.remove("open");
-    showToast("Spot deleted");
-    
-    // Check if we need to show empty state after deletion
-    if (allSpots.length === 0) {
-      renderPage();
-    }
-  } catch (error) {
-    console.error("Error deleting spot:", error);
-    alert("Failed to delete spot. Please try again.");
-  }
-});
-
-// === Inline Edit ===
+// Inline edit functionality
 function inlineEdit(card) {
   const header = card.querySelector(".card__header");
   const oldText = header.textContent;
@@ -146,39 +192,42 @@ function inlineEdit(card) {
     <button class="btn-secondary" data-action="cancel">Cancel</button>
     <button class="btn-secondary" data-action="save">Save</button>
   `;
-  actions.addEventListener(
-    "click",
-    async (e) => {
-      const act = e.target.dataset.action;
-      if (act === "cancel") {
+
+  actions.addEventListener("click", async (e) => {
+    const act = e.target.dataset.action;
+    if (act === "cancel") {
+      input.replaceWith(header);
+      actions.innerHTML = `
+        <button class="btn-secondary" data-action="edit">Edit</button>
+        <button class="btn-secondary" data-action="delete">Delete</button>
+      `;
+    }
+    if (act === "save") {
+      const newName = input.value.trim() || oldText;
+      try {
+        await updateDoc(doc(db, "spots", card.dataset.id), { name: newName });
+        header.textContent = newName;
         input.replaceWith(header);
         actions.innerHTML = `
           <button class="btn-secondary" data-action="edit">Edit</button>
           <button class="btn-secondary" data-action="delete">Delete</button>
         `;
+        showToast("Spot updated");
+      } catch (error) {
+        console.error("Error updating spot:", error);
+        alert("Failed to update spot. Please try again.");
       }
-      if (act === "save") {
-        const newName = input.value.trim() || oldText;
-        try {
-          await updateDoc(doc(db, "spots", card.dataset.id), { name: newName });
-          header.textContent = newName;
-          input.replaceWith(header);
-          actions.innerHTML = `
-            <button class="btn-secondary" data-action="edit">Edit</button>
-            <button class="btn-secondary" data-action="delete">Delete</button>
-          `;
-          showToast("Spot updated");
-        } catch (error) {
-          console.error("Error updating spot:", error);
-          alert("Failed to update spot. Please try again.");
-        }
-      }
-    },
-    { once: true }
-  );
+    }
+  }, { once: true });
 }
 
-// === Toast ===
+// Load more spots
+document.getElementById("load-more").addEventListener("click", () => {
+  currentPage++;
+  renderPage();
+});
+
+// Toast notification
 function showToast(msg) {
   const t = document.createElement("div");
   t.className = "toast";
@@ -187,4 +236,13 @@ function showToast(msg) {
   setTimeout(() => t.remove(), 3000);
 }
 
-init();
+// Initialize the page
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    allSpots = await fetchSpots(user.uid);
+    renderPage();
+  } else {
+    alert("You must be logged in to view your spots.");
+    window.location.href = "login.html";
+  }
+});
