@@ -23,41 +23,46 @@
   <main class="signup-container">
     <form id="signup-form" class="signup-form">
       <h1 class="signup-form__title">Create Your Account</h1>
-
+  
+      <!-- Username (left) -->
       <div class="signup-form__group">
         <label for="su-username">Username</label>
         <input id="su-username" type="text" placeholder="Username" required/>
         <div class="field-error" id="error-username">Username is required.</div>
       </div>
-
+  
+      <!-- Email (right) -->
       <div class="signup-form__group">
         <label for="su-email">Email</label>
         <input id="su-email" type="email" placeholder="you@example.com" required/>
         <div class="field-error" id="error-email">Enter a valid email.</div>
       </div>
-
+  
+      <!-- Password (left) -->
       <div class="signup-form__group">
         <label for="su-password">Password</label>
         <input id="su-password" type="password" placeholder="Password" required/>
         <div class="field-error" id="error-password">Password is required.</div>
       </div>
-
+  
+      <!-- Confirm Password (right) -->
       <div class="signup-form__group">
         <label for="su-confirm">Confirm Password</label>
         <input id="su-confirm" type="password" placeholder="Confirm Password" required/>
         <div class="field-error" id="error-confirm">Passwords must match.</div>
       </div>
-
+  
+      <!-- Date of Birth (full width) -->
       <div class="signup-form__group">
         <label for="su-dob">Date of Birth</label>
         <input id="su-dob" type="date" max="" required/>
         <div class="field-error" id="error-dob">Please enter your birth date.</div>
       </div>
-
-      <button type="submit" class="signup-form__btn" id="signup-submit">Sign Up</button>
-
+  
+      <button type="submit" class="signup-form__btn" id="signup-submit">Sign Up</button>
+  
       <p class="signup-form__text">
-        Already have an account? <a href="login.html">Log In</a>
+        Already have an account? <a href="login.html">Log In</a>
       </p>
     </form>
   </main>
