@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="../css/variables.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/components.css"/>
+  <script type="module" src="details.js" defer></script>
 </head>
-<body class="home-bg favorites-page">
+<body class="home-bg">
   <!-- HEADER -->
   <header class="ds-header">
     <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
@@ -37,26 +38,82 @@
     <ul>
       <li><a href="home.html">Spots</a></li>
       <li><a href="myspots.html">My Spots</a></li>
-      <li><a href="favorites.html" class="active">Favorites</a></li>
+      <li><a href="favorites.html">Favorites</a></li>
       <li><a href="create.html">Add Spot</a></li>
       <li><a href="faq.html">FAQs</a></li>
     </ul>
   </nav>
 
+  <!-- MAIN CONTENT -->
+  <main class="page-container">
+    <div class="spot-details">
+      <!-- Spot Header -->
+      <div class="spot-header">
+        <h1 class="spot-title" id="spot-name">[Spot Name]</h1>
+        <div class="spot-meta">
+          <span class="spot-category" id="spot-category">[Category]</span>
+          <span class="spot-location">
+            <img src="../assets/icons/location.png" alt="" width="16"/>
+            <span id="spot-location">[Location]</span>
+          </span>
+        </div>
+        
+        <!-- Rating Display -->
+        <div class="spot-rating">
+          <div class="rating" id="spot-rating-display">
+            <label class="highlighted">★</label>
+            <label class="highlighted">★</label>
+            <label class="highlighted">★</label>
+            <label class="highlighted">★</label>
+            <label class="highlighted">★</label>
+          </div>
+          <span class="spot-rating-value">[Rating]</span>
+        </div>
+      </div>
 
+      <!-- Description -->
+      <div class="spot-description">
+        <h2>About This Spot</h2>
+        <p id="spot-description">[Description]</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="spot-actions">
+        <button id="favorite-btn" class="favorite-btn btn-primary">
+          <span id="favorite-text">Add to Favorites</span>
+        </button>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="comments-section">
+        <h2 class="comments-title">Comments</h2>
+        
+        <!-- Comment Form -->
+        <form class="comment-form" id="comment-form">
+          <textarea class="comment-input" id="comment-input" placeholder="Share your experience..."></textarea>
+          <button type="submit" class="comment-submit btn-primary">Post Comment</button>
+        </form>
+        
+        <!-- Comments List -->
+        <div class="comments-list" id="comments-list">
+          <!-- Comments will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script type="module">
-    // — NAV & DROPDOWN —
-    const menuBtn     = document.getElementById('menu-btn'),
-          sideNav     = document.getElementById('side-nav'),
-          profileBtn  = document.getElementById('profile-btn'),
-          profileWrap = document.querySelector('.profile-dropdown'),
-          logoutBtn   = document.getElementById('logout-btn');
-
+    // Sidebar toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sideNav = document.getElementById('side-nav');
     menuBtn.addEventListener('click', () => {
       sideNav.classList.toggle('side-nav--open');
       document.body.classList.toggle('nav-open');
     });
+
+    // Profile dropdown toggle
+    const profileBtn  = document.getElementById('profile-btn');
+    const profileWrap = document.querySelector('.profile-dropdown');
     profileBtn.addEventListener('click', e => {
       e.stopPropagation();
       profileWrap.classList.toggle('profile-dropdown--open');
@@ -64,5 +121,11 @@
     document.addEventListener('click', () => {
       profileWrap.classList.remove('profile-dropdown--open');
     });
-    logoutBtn.addEventListener('click', () => location.href = 'login.html');
-    </script>
+
+    // Log out action
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

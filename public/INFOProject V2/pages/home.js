@@ -56,7 +56,7 @@ async function fetchSpots() {
 }
 
 // Render the map iframe
-function displaySpotIframe(iframeUrl, title, spotId) {
+function displaySpotIframe(iframeUrl, title) {
     const mapPlaceholder = document.getElementById("map");
   
     if (!iframeUrl) {
@@ -73,15 +73,15 @@ function displaySpotIframe(iframeUrl, title, spotId) {
           class="map-iframe"
           title="Location of ${title}">
         </iframe>
-        <button class="view-details-btn" onclick="redirectToDetails('${spotId}')">View Details</button>
+        <button class="view-details-btn" onclick="redirectToDetails()">View Details</button>
       </div>
     `;
   }
   
-  // Redirect to the details page
-  function redirectToDetails(spotId) {
-    window.location.href = `details.html?spotId=${spotId}`;
-  }
+  // Make the function globally accessible
+window.redirectToDetails = function () {
+    window.location.href = "detail.html";
+  };
   
   // Set the default placeholder message when the page loads
   mapPlaceholder.innerHTML = `

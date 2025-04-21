@@ -49,8 +49,13 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
     // Generate a unique ID for the spot
     const spotId = spotName.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(); // Example: "spot-name-1681234567890"
 
-    // Add a new document with the generated ID
+    // Add a new document with the generated ID to the "spots" collection
     await setDoc(doc(db, "spots", spotId), spotData);
+
+    // Initialize the comments collection for the new spot
+    await setDoc(doc(db, "comments", spotId), {
+      comments: {} // Initialize with an empty comments map
+    });
 
     console.log("Document written with ID: ", spotId);
 
