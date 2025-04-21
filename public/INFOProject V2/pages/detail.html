@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Spot Details – D’Spot</title>
+  <title>Spot Details – D’Spot</title>
   <link rel="stylesheet" href="../css/variables.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/components.css"/>
@@ -26,9 +26,9 @@
         <div class="profile-dropdown__avatar">
           <img src="../assets/icons/profile.png" alt="Your avatar"/>
         </div>
-        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
         <a href="settings.html" class="profile-dropdown__item">Settings</a>
-        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
       </div>
     </div>
   </header>
@@ -37,9 +37,9 @@
   <nav class="side-nav" id="side-nav">
     <ul>
       <li><a href="home.html">Spots</a></li>
-      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
       <li><a href="favorites.html">Favorites</a></li>
-      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="create.html">Add Spot</a></li>
       <li><a href="faq.html">FAQs</a></li>
     </ul>
   </nav>
@@ -49,32 +49,29 @@
     <div class="spot-details">
       <!-- Spot Header -->
       <div class="spot-header">
-        <h1 class="spot-title" id="spot-name">[Spot Name]</h1>
-        <div class="spot-meta">
-          <span class="spot-category" id="spot-category">[Category]</span>
-          <span class="spot-location">
-            <img src="../assets/icons/location.png" alt="" width="16"/>
-            <span id="spot-location">[Location]</span>
-          </span>
-        </div>
-        
-        <!-- Rating Display -->
-        <div class="spot-rating">
-          <div class="rating" id="spot-rating-display">
-            <label class="highlighted">★</label>
-            <label class="highlighted">★</label>
-            <label class="highlighted">★</label>
-            <label class="highlighted">★</label>
-            <label class="highlighted">★</label>
+        <div class="spot-info">
+          <h1 class="spot-title" id="spot-name"></h1>
+          <div class="spot-meta">
+            <span class="spot-category" id="spot-category"></span>
           </div>
-          <span class="spot-rating-value">[Rating]</span>
+          <div class="spot-location">
+            <span class="spot-location" id="spot-location"></span>
+          </div>
+          <!-- Rating Display -->
+          <div class="spot-rating">
+            <div class="rating" id="spot-rating-display"></div>
+            <span class="spot-rating-value" id="spot-rating-value"></span>
+          </div>
+        </div>
+        <div class="spot-image">
+          <img src="../assets/img/doubles.jpg" alt="Spot Image" id="spot-image" />
         </div>
       </div>
 
       <!-- Description -->
       <div class="spot-description">
         <h2>About This Spot</h2>
-        <p id="spot-description">[Description]</p>
+        <p id="spot-description"></p>
       </div>
 
       <!-- Actions -->

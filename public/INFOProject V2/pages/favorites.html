@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/variables.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/components.css"/>
+  <script type="module" src="favorites.js" defer></script>
 </head>
 <body class="home-bg favorites-page">
   <!-- HEADER -->
@@ -52,7 +53,7 @@
       <p>You haven’t favorited any spots yet.</p>
       <a href="home.html" class="btn-primary">Browse Spots</a>
     </div>
-
+    
     <!-- 4. Skeleton UI while loading -->
     <div id="favorites-list" class="grid"></div>
   </main>
@@ -81,7 +82,7 @@
     });
     logoutBtn.addEventListener('click', () => location.href = 'login.html');
 
-    // — UI Helpers —
+  /*  // — UI Helpers —
     const listEl      = document.getElementById('favorites-list'),
           emptyState  = document.getElementById('empty-state'),
           toastCt     = document.getElementById('toast-container');
@@ -168,7 +169,7 @@
       showToast(`Removed ${name}`, loadFavorites);
     });
 
-    loadFavorites();
+    loadFavorites(); */
   </script>
 </body>
 </html>

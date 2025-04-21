@@ -11,8 +11,6 @@ const auth = getAuth(app);
 // DOM Elements
 const carouselTrack = document.querySelector(".carousel__track");
 const mapPlaceholder = document.getElementById("map");
-const searchInput = document.getElementById("search-input");
-const searchBtn = document.getElementById("search-btn");
 const logoutBtn = document.getElementById("logout-btn");
 
 // Placeholder image for spots
@@ -44,7 +42,7 @@ async function fetchSpots() {
 
       // Add click event to render the map iframe
       carouselItem.addEventListener("click", () => {
-        displaySpotIframe(spot.embed, spot.name); // Call displaySpotIframe with embed link and spot name
+        displaySpotIframe(spot.embed, spot.name, spotId); // Call displaySpotIframe with embed link and spot name
       });
 
       // Append the item to the carousel track
@@ -55,33 +53,39 @@ async function fetchSpots() {
   }
 }
 
-// Render the map iframe
-function displaySpotIframe(iframeUrl, title) {
-    const mapPlaceholder = document.getElementById("map");
-  
-    if (!iframeUrl) {
-      mapPlaceholder.innerHTML = `<p class="no-map-message">No map available for ${title}</p>`;
-      return;
-    }
-  
-    // Create responsive iframe with a "View Details" button
-    mapPlaceholder.innerHTML = `
-      <div class="map-container">
-        <h3 class="map-title">${title}</h3>
-        <iframe 
-          src="${iframeUrl}"
-          class="map-iframe"
-          title="Location of ${title}">
-        </iframe>
-        <button class="view-details-btn" onclick="redirectToDetails()">View Details</button>
-      </div>
-    `;
+function displaySpotIframe(iframeUrl, title, spotId) {
+  const mapPlaceholder = document.getElementById("map");
+
+  if (!iframeUrl) {
+    mapPlaceholder.innerHTML = `<p class="no-map-message">No map available for ${title}</p>`;
+    return;
   }
+
+  // Create responsive iframe with a "View Details" button
+  mapPlaceholder.innerHTML = `
+    <div class="map-container">
+      <h3 class="map-title">${title}</h3>
+      <iframe 
+        src="${iframeUrl}"
+        class="map-iframe"
+        title="Location of ${title}">
+      </iframe>
+      <button class="view-details-btn" id="view-details-btn">View Details</button>
+    </div>
+  `;
+
+  // Attach event listener to the "View Details" button
+  const viewDetailsBtn = document.getElementById("view-details-btn");
+  viewDetailsBtn.addEventListener("click", () => redirectToDetails(spotId));
+}
   
-  // Make the function globally accessible
-window.redirectToDetails = function () {
-    window.location.href = "detail.html";
-  };
+window.redirectToDetails = function (spotId) {
+  if (!spotId) {
+    console.error("Spot ID is missing!");
+    return;
+  }
+  window.location.href = `detail.html?spotId=${spotId}`;
+};
   
   // Set the default placeholder message when the page loads
   mapPlaceholder.innerHTML = `
@@ -133,8 +137,8 @@ window.redirectToDetails = function () {
   
             // Add click event to render the map iframe
             carouselItem.addEventListener("click", () => {
-                displaySpotIframe(spot.embed, spot.name, spotId);
-              });
+              displaySpotIframe(spot.embed, spot.name, spotId);
+            });
   
             // Append the item to the carousel track
             carouselTrack.appendChild(carouselItem);
@@ -148,7 +152,7 @@ window.redirectToDetails = function () {
         console.error("Error searching spots:", error);
       }
     });
-  });
+  }); // <-- Missing closing bracket added here
 
 // Logout functionality
 logoutBtn.addEventListener("click", async () => {
