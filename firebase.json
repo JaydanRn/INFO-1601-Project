@@ -4,7 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "public/INFOProject V2/pages",
     "ignore": [
       "firebase.json",
       "**/.*",

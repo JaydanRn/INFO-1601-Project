@@ -1083,3 +1083,212 @@
   color: white;
 }
 
+/* Login Page Styles */
+body.auth-page {
+  background-color: var(--clr-primary-light); /* Light background color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.auth-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-form__title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--clr-primary-dark); /* Primary dark color */
+  margin-bottom: 1.5rem;
+}
+
+.auth-form__group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.auth-form__group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--clr-primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+.auth-form__group input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid var(--clr-neutral-light);
+  border-radius: 8px;
+  background-color: var(--clr-neutral-lightest);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-form__group input:focus {
+  border-color: var(--clr-primary); /* Primary color on focus */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2); /* Subtle shadow effect */
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: var(--clr-error); /* Error color */
+  margin-top: 0.25rem;
+  display: none; /* Hidden by default */
+}
+
+.auth-form__btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--clr-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.auth-form__btn:hover {
+  background-color: var(--clr-primary-dark); /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.auth-form__btn:active {
+  background-color: var(--clr-primary-darker); /* Even darker shade on click */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+.auth-form__btn:disabled {
+  background-color: #ccc; /* Disabled state color */
+  color: #666; /* Muted text color */
+  cursor: not-allowed;
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+.auth-form__text {
+  font-size: 0.9rem;
+  color: var(--clr-neutral-dark);
+  margin-top: 1.5rem;
+}
+
+.auth-form__text a {
+  color: var(--clr-primary);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.auth-form__text a:hover {
+  text-decoration: underline;
+}
+
+.login-form__btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--clr-primary); /* Primary color */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.login-form__btn:hover {
+  background-color: var(--clr-primary-dark); /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.login-form__btn:active {
+  background-color: var(--clr-primary-darker); /* Even darker shade on click */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+.login-form__btn:disabled {
+  background-color: #ccc; /* Disabled state color */
+  color: #666; /* Muted text color */
+  cursor: not-allowed;
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+.login-form__text {
+  font-size: 0.9rem;
+  color: var(--clr-neutral-dark);
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.login-form__text a {
+  color: var(--clr-primary);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-form__text a:hover {
+  text-decoration: underline;
+}
+
+.signup-form__btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--clr-primary); /* Primary color */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.signup-form__btn:hover {
+  background-color: var(--clr-primary-dark); /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.signup-form__btn:active {
+  background-color: var(--clr-primary-darker); /* Even darker shade on click */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+.signup-form__btn:disabled {
+  background-color: #ccc; /* Disabled state color */
+  color: #666; /* Muted text color */
+  cursor: not-allowed;
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+.signup-form__text {
+  font-size: 0.9rem;
+  color: var(--clr-neutral-dark);
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.signup-form__text a {
+  color: var(--clr-primary);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.signup-form__text a:hover {
+  text-decoration: underline;
+}
