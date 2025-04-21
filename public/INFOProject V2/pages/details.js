@@ -98,84 +98,90 @@ document.getElementById("favorite-btn").addEventListener("click", () => {
 
 // Fetch and display comments for the spot
 async function fetchComments() {
-  const commentsList = document.getElementById("comments-list");
-  commentsList.innerHTML = "<p>Loading comments...</p>";
-
-  try {
-    const commentsDoc = await getDoc(doc(db, "comments", spotId));
-    if (commentsDoc.exists()) {
-      const commentsData = commentsDoc.data().comments || {};
-      commentsList.innerHTML = ""; // Clear the loading message
-
-      // Render each comment
-      Object.values(commentsData).forEach((comment) => {
-        const commentEl = document.createElement("div");
-        commentEl.classList.add("comment");
-        commentEl.innerHTML = `
-          <p class="comment-user"><strong>${comment.user}</strong></p>
-          <p class="comment-text">${comment.text}</p>
-        `;
-        commentsList.appendChild(commentEl);
-      });
-    } else {
-      commentsList.innerHTML = "<p>No comments yet. Be the first to comment!</p>";
+    const commentsList = document.getElementById("comments-list");
+    commentsList.innerHTML = "<p>Loading comments...</p>";
+  
+    try {
+      const commentsDoc = await getDoc(doc(db, "comments", spotId));
+      if (commentsDoc.exists()) {
+        const commentsData = commentsDoc.data().comments || {};
+        commentsList.innerHTML = ""; // Clear the loading message
+  
+        // Render each comment
+        Object.values(commentsData).forEach((comment) => {
+          const commentEl = document.createElement("div");
+          commentEl.classList.add("comment");
+          commentEl.innerHTML = `
+            <p class="comment-user"><strong>${comment.user || "Anonymous"}</strong></p>
+            <p class="comment-text">${comment.text || ""}</p>
+          `;
+          commentsList.appendChild(commentEl);
+        });
+  
+        // If no comments exist in the map
+        if (Object.keys(commentsData).length === 0) {
+          commentsList.innerHTML = "<p>No comments yet. Be the first to comment!</p>";
+        }
+      } else {
+        commentsList.innerHTML = "<p>No comments yet. Be the first to comment!</p>";
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      commentsList.innerHTML = "<p>Failed to load comments. Please try again later.</p>";
     }
-  } catch (error) {
-    console.error("Error fetching comments:", error);
-    commentsList.innerHTML = "<p>Failed to load comments. Please try again later.</p>";
   }
-}
-
-// Submit a new comment
-async function submitComment(event) {
-  event.preventDefault();
-
-  const commentInput = document.getElementById("comment-input");
-  const commentText = commentInput.value.trim();
-
-  if (!commentText) {
-    alert("Comment cannot be empty.");
-    return;
-  }
-
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("You must be logged in to submit a comment.");
+  
+  // Submit a new comment
+  async function submitComment(event) {
+    event.preventDefault();
+  
+    const commentInput = document.getElementById("comment-input");
+    const commentText = commentInput.value.trim();
+  
+    if (!commentText) {
+      alert("Comment cannot be empty.");
       return;
     }
-
-    // Fetch the user's username from the "users" collection
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    const username = userDoc.exists() ? userDoc.data().username : "Anonymous";
-
-    // Update the comments document for the spot
-    const commentId = `comment-${Date.now()}`; // Unique ID for the comment
-    await updateDoc(doc(db, "comments", spotId), {
-      [`comments.${commentId}`]: {
-        user: username,
-        text: commentText,
-      },
-    });
-
-    // Clear the input field
-    commentInput.value = "";
-
-    // Refresh the comments list
-    fetchComments();
-
-    alert("Comment submitted successfully!");
-  } catch (error) {
-    console.error("Error submitting comment:", error);
-    alert("Failed to submit comment. Please try again.");
+  
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("You must be logged in to submit a comment.");
+        return;
+      }
+  
+      // Fetch the user's username from the "users" collection
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const username = userDoc.exists() ? userDoc.data().username : "Anonymous";
+  
+      // Update the comments document for the spot
+      const commentId = `comment-${Date.now()}`; // Unique ID for the comment
+      await updateDoc(doc(db, "comments", spotId), {
+        [`comments.${commentId}`]: {
+          userId: user.uid,
+          user: username,
+          text: commentText,
+        },
+      });
+  
+      // Clear the input field
+      commentInput.value = "";
+  
+      // Refresh the comments list
+      fetchComments();
+  
+      alert("Comment submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      alert("Failed to submit comment. Please try again.");
+    }
   }
-}
-
-// Attach event listener to the comment form
-document.getElementById("comment-form").addEventListener("submit", submitComment);
-
-// Call the function to fetch and display spot details
-fetchSpotDetails();
-
-// Call the function to fetch and display comments
-fetchComments();
+  
+  // Attach event listener to the comment form
+  document.getElementById("comment-form").addEventListener("submit", submitComment);
+  
+  // Call the function to fetch and display spot details
+  fetchSpotDetails();
+  
+  // Call the function to fetch and display comments
+  fetchComments();
