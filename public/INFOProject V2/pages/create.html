@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Spot – D’Spot</title>
+  <link rel="stylesheet" href="../css/variables.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <script type="module" src="create.js" defer></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="ds-header">
+    <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
+      <img src="../assets/icons/menu.png" alt="Menu"/>
+    </button>
+    <a href="home.html" class="ds-header__logo">
+      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+    </a>
+    <div class="profile-dropdown">
+      <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
+        <img src="../assets/icons/profile.png" alt="Profile"/>
+      </button>
+      <div class="profile-dropdown__menu">
+        <div class="profile-dropdown__avatar">
+          <img src="../assets/icons/profile.png" alt="Your avatar"/>
+        </div>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="settings.html" class="profile-dropdown__item">Settings</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav" id="side-nav">
+    <ul>
+      <li><a href="home.html">Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="favorites.html">Favorites</a></li>
+      <li><a href="create.html" class="active">Add Spot</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-container">
+    <section class="create-spot-section">
+      <h2>Add a New Spot</h2>
+
+      <form id="create-form" class="create-form">
+        
+
+        <!-- 2: Spot Name -->
+        <div class="create-form__group">
+          <label for="spot-name">Spot Name</label>
+          <input type="text" id="spot-name" placeholder="e.g., Roti King"/>
+          <span class="field-error" id="error-name">Name is required.</span>
+        </div>
+
+        <!-- 3: Location -->
+        <div class="create-form__group">
+          <label for="spot-location">Location</label>
+          <input type="text" id="spot-location" placeholder="e.g., Curepe Junction"/>
+          <span class="field-error" id="error-location">Location is required.</span>
+        </div>
+
+        <!-- 4: Embed Code -->
+        <div class="create-form__group">
+          <label for="embed">Google Maps Embed</label>
+          <input type="text" id="spot-embed" placeholder="e.g., https://www.google.com/maps/embed...."/>
+          <span class="field-error" id="error-location">Embed is required.</span>
+        </div>
+
+        <!-- 4: Category as Pills -->
+        <div class="create-form__group">
+          <label>Category</label>
+          <div class="category-pills">
+            <button type="button" class="category-pill" data-value="Sandwiches">Sandwiches</button>
+            <button type="button" class="category-pill" data-value="Doubles">Doubles</button>
+            <button type="button" class="category-pill" data-value="Roti">Roti</button>
+            <button type="button" class="category-pill" data-value="Curry">Curry</button>
+            <button type="button" class="category-pill category-pill--custom">Custom</button>
+          </div>
+          <input type="hidden" name="category" id="spot-category" value=""/>
+          <div id="custom-category-input" style="display:none; margin-top:8px;">
+            <label for="spot-category-custom">Enter category</label>
+            <input type="text" id="spot-category-custom" placeholder="e.g., Dessert"/>
+            <span class="field-error" id="error-category">Please pick a category.</span>
+          </div>
+        </div>
+
+        <!-- 5: Rating -->
+        <div class="create-form__group rating-group">
+          <label>Rating</label>
+          <div class="rating">
+            <label><input type="radio" name="rating" value="5"/>★</label>
+            <label><input type="radio" name="rating" value="4"/>★</label>
+            <label><input type="radio" name="rating" value="3"/>★</label>
+            <label><input type="radio" name="rating" value="2"/>★</label>
+            <label><input type="radio" name="rating" value="1"/>★</label>
+          </div>
+          <span class="field-error" id="error-rating">Enter a valid rating.</span>
+        </div>
+
+        <!-- 6: Description -->
+        <div class="create-form__group description-group">
+          <label for="spot-description">Description</label>
+          <textarea id="spot-description" rows="4" placeholder="Tell us about the food, vibe, service…"></textarea>
+          <span class="field-error" id="error-description">Description is required.</span>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-primary create-form__btn">Add Spot</button>
+        <span class="field-error" id="form-error">Something went wrong. Try again.</span>
+      </form>
+    </section>
+  </main>
+
+  <script type="module">
+    // Sidebar toggle
+    const menuBtn     = document.getElementById('menu-btn');
+    const sideNav     = document.getElementById('side-nav');
+    menuBtn.addEventListener('click', () => {
+      sideNav.classList.toggle('side-nav--open');
+      document.body.classList.toggle('nav-open');
+    });
+
+    // Profile dropdown toggle
+    const profileBtn  = document.getElementById('profile-btn');
+    const profileWrap = document.querySelector('.profile-dropdown');
+    profileBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileWrap.classList.toggle('profile-dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      profileWrap.classList.remove('profile-dropdown--open');
+    });
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    // File picker + preview
+    /*const fileInput  = document.getElementById('spot-image');
+    const triggerBtn = document.getElementById('trigger-file');
+    const previewImg = document.getElementById('preview');
+    triggerBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.style.display = 'block';
+    });
+    */
+
+    // Category‑pill logic
+    const pills          = document.querySelectorAll('.category-pill');
+    const hiddenCategory = document.getElementById('spot-category');
+    const customWrapper  = document.getElementById('custom-category-input');
+    const customField    = document.getElementById('spot-category-custom');
+
+    pills.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('category-pill--active'));
+        btn.classList.add('category-pill--active');
+
+        if (btn.classList.contains('category-pill--custom')) {
+          customWrapper.style.display = 'block';
+          customField.focus();
+          hiddenCategory.value = customField.value;
+        } else {
+          customWrapper.style.display = 'none';
+          hiddenCategory.value = btn.dataset.value;
+        }
+      });
+    });
+
+    customField.addEventListener('input', () => {
+      hiddenCategory.value = customField.value;
+    });
+
+   // Star rating logic
+const ratingInputs = document.querySelectorAll('.rating input');
+
+ratingInputs.forEach((input, index) => {
+  input.addEventListener('change', () => {
+    // Highlight all stars up to and including the selected one
+    ratingInputs.forEach((star, i) => {
+      const label = star.parentElement; // Get the label element
+      if (i >= index) { // Reverse logic to account for row-reverse
+        label.classList.add('highlighted');
+      } else {
+        label.classList.remove('highlighted');
+      }
+    });
+  });
+});
+
+    // TODO: Form validation & firebaseAPI.createSpot(...)
+  </script>
+</body>
+</html>

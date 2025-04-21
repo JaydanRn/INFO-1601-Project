@@ -1,0 +1,862 @@
+/* == Component Styles for D’Spot == */
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--ff-body);
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  .btn-primary {
+    background-color: var(--clr-primary);
+    color: white;
+  }
+  .btn-secondary {
+    background-color: var(--clr-secondary);
+    color: white;
+  }
+  
+  /* Cards */
+  .card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  .card__header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+  }
+  .card__sub {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .card__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  .card__actions .btn-secondary {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 20px;
+    background: none;
+    border: 2px solid var(--clr-primary);
+    color: var(--clr-primary);
+    transition: background 0.2s, color 0.2s;
+  }
+  .card__actions .btn-secondary:hover {
+    background: var(--clr-primary);
+    color: white;
+  }
+  .card__actions button[data-action="delete"] {
+    border-color: var(--clr-secondary);
+    color: var(--clr-secondary);
+  }
+  .card__actions button[data-action="delete"]:hover {
+    background: var(--clr-secondary);
+    color: white;
+  }
+  
+  /* Inputs & Textareas */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-family: var(--ff-body);
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--clr-primary);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+  }
+  
+  /* == Header == */
+  .ds-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--space-lg);
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    z-index: 1000;
+  }
+  .ds-header__menu, .ds-header__profile {
+    display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .ds-header__menu img, .ds-header__profile img {
+    width: 24px; height: 24px; object-fit: contain;
+  }
+  .ds-header__logo {
+    flex: 1; display: flex; justify-content: center; align-items: center;
+  }
+  .ds-logo-img {
+    height: 125px; width: auto; object-fit: contain;
+  }
+  .auth-page .ds-header__menu,
+  .auth-page .ds-header__profile {
+    display: none;
+  }
+  
+  /* == Side‑Nav Drawer == */
+  .side-nav {
+    position: fixed;
+    top: 64px; left: 0; bottom: 0;
+    width: 220px;
+    background: #ffffff;
+    border-right: 1px solid #e0dfdc;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    padding-top: var(--space-lg);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 900;
+  }
+  .side-nav--open {
+    transform: translateX(0);
+  }
+  .side-nav ul {
+    list-style: none; margin: 0; padding: 0;
+  }
+  .side-nav li {
+    margin-bottom: var(--space-md);
+  }
+  .side-nav a {
+    display: flex; align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--ff-body);
+    font-size: 1rem;
+    color: #555555;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+  }
+  .side-nav a:hover {
+    background: rgba(230,57,70,0.1);
+    color: var(--clr-primary);
+    padding-left: calc(var(--space-md) + 4px);
+  }
+  .side-nav a.active {
+    background: var(--clr-primary);
+    color: white;
+    padding-left: var(--space-md);
+  }
+  body.nav-open .page-container {
+    margin-left: 220px;
+    transition: margin-left 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    body.nav-open .page-container {
+      margin-left: 0;
+    }
+  }
+  
+  /* == Profile‑Dropdown == */
+  .profile-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .profile-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 160px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1001;
+  }
+  .profile-dropdown--open .profile-dropdown__menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .profile-dropdown__avatar {
+    width: 64px;
+    height: 64px;
+    margin: 12px auto 8px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .profile-dropdown__avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .profile-dropdown__item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    color: var(--clr-text);
+    text-align: left;
+    background: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .profile-dropdown__item:hover {
+    background: rgba(0,0,0,0.05);
+  }
+  
+  /* == Homepage Styles == */
+  body.home-bg {
+    background-color: var(--clr-bg);
+  }
+  .page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    padding-top: calc(64px + var(--space-lg));
+  }
+  
+  /* == Search Bar == */
+  .search-bar {
+    display: flex; align-items: stretch;
+    margin-bottom: var(--space-lg);
+  }
+  .search-bar__input {
+    flex: 1;
+    height: 48px;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--clr-primary);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 1rem;
+  }
+  .search-bar__input:focus {
+    border-color: var(--clr-secondary);
+  }
+  .search-bar__btn {
+    height: 48px;
+    padding: 0 var(--space-md);
+    background-color: var(--clr-primary);
+    color: white;
+    border: 2px solid var(--clr-primary);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  @media (max-width: 480px) {
+    .search-bar {
+      flex-direction: column;
+    }
+    .search-bar__input,
+    .search-bar__btn {
+      width: 100%;
+    }
+  }
+  
+  /* == Map Placeholder == */
+  .map-placeholder {
+    width: 100%;
+    height: 320px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: var(--space-lg);
+  }
+  
+  /* == Featured Section & Carousel == */
+  .featured-section h2 {
+    font-family: var(--ff-heading);
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+  }
+  .carousel {
+    position: relative; display: flex; align-items: center;
+  }
+  .carousel__track {
+    display: flex; gap: var(--space-lg);
+    overflow-x: auto; scroll-behavior: smooth;
+    padding-bottom: var(--space-sm);
+  }
+  .carousel__item {
+    flex: 0 0 220px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .carousel__item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .carousel__item img {
+    width: 100%; height: 140px; object-fit: cover;
+  }
+  .card__body {
+    padding: var(--space-sm);
+  }
+  .card__actions {
+    margin-top: var(--space-md);
+  }
+  
+  /* == Create‑Spot Form (“glass” style) == */
+.create-form {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    padding: var(--space-lg);
+    max-width: 600px;
+    margin: 0 auto var(--space-lg);
+  }
+  
+  /* hide the browser’s default file input */
+  #create-form input[type="file"] {
+    display: none;
+  }
+  /* only show our custom trigger button */
+  #create-form #trigger-file {
+    display: inline-block;
+    margin-top: var(--space-sm);
+  }
+  
+  /* keep all validation messages hidden until toggled via JS */
+  .field-error {
+    display: none;
+    color: #E63946;
+    font-size: 0.875rem;
+    margin-top: 4px;
+  }
+  
+  /* make “Add Spot” full width again */
+  .create-form__btn {
+    width: 100%;
+    height: 48px;
+    font-size: 1.125rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .create-form__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  }
+  
+  /* == Rating widget: bigger stars, fill left→right == */
+  .rating {
+    display: flex;
+    flex-direction: row-reverse;    /* keep our left‑to‑right fill logic */
+    justify-content: flex-end;      /* align the reversed row on the left */
+    font-size: 1.75rem;             /* bump up star size */
+    gap: 4px;
+  }
+  .rating input {
+    display: none;
+  }
+  .rating label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+  }
+  .rating label:hover,
+  .rating label:hover ~ label,
+  .rating input:checked ~ label {
+    color: var(--clr-primary);
+  }
+  
+  
+  
+  /* == My Spots Page Styles == */
+  #spots-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    max-width: 1000px;
+    margin: var(--space-lg) auto;
+  }
+  @media (max-width: 600px) {
+    #spots-list {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* == Load More button == */
+  .load-more-container {
+    text-align: center;
+    margin: var(--space-lg) 0;
+  }
+  .load-more-btn {
+    padding: var(--space-sm) var(--space-lg);
+    font-family: var(--ff-body);
+    font-size: 1rem;
+    border: 2px solid var(--clr-primary);
+    background: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .load-more-btn:hover {
+    background: var(--clr-primary);
+    color: white;
+  }
+  
+  /* == Modal (delete confirmation) == */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+  .modal-overlay.open {
+    display: flex;
+  }
+  .modal {
+    background: white;
+    padding: var(--space-lg);
+    border-radius: 8px;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .modal p {
+    margin-bottom: var(--space-md);
+  }
+  .modal__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+  
+  /* == Toast Notifications == */
+  .toast-container {
+    position: fixed;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    z-index: 3000;
+  }
+  .toast {
+    background: rgba(51,51,51,0.9);
+    color: white;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    animation: fadeInOut 3s ease forwards;
+  }
+  @keyframes fadeInOut {
+    0%   { opacity: 0; transform: translateY(20px) scale(0.95); }
+    10%  { opacity: 1; transform: translateY(0) scale(1); }
+    90%  { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  }
+  
+  /* == Favorites Page Styles == */
+ #favorites-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    max-width: 1000px;
+    margin: var(--space-lg) auto;
+  }
+  
+  @media (max-width: 600px) {
+    #favorites-list {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+ /* == “Remove” Button in Favorites == */
+#favorites-list .btn-secondary[data-action="remove"] {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 20px;
+    background: none;
+    border: 2px solid #E63946;
+    color: #E63946;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  #favorites-list .btn-secondary[data-action="remove"]:hover {
+    background: #E63946;
+    color: white;
+  }
+
+  /* == FAQ Styles == */
+.faq-search {
+    max-width: 400px;
+    margin: var(--space-lg) auto;
+  }
+  .faq-search input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .faq-section {
+    max-width: 800px;
+    margin: 0 auto var(--space-lg);
+  }
+  .faq-item {
+    border-bottom: 1px solid #eee;
+    padding: var(--space-md) 0;
+  }
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: var(--space-sm) 0;
+    cursor: pointer;
+    position: relative;
+  }
+  .faq-question::after {
+    content: "+";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.25rem;
+    transition: transform 0.2s;
+  }
+  .faq-item.open .faq-question::after {
+    content: "–";
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-item.open .faq-answer {
+    max-height: 500px; /* big enough for most answers */
+    margin-top: var(--space-sm);
+  }
+  .faq-answer p {
+    margin: 0 var(--space-md);
+    line-height: 1.5;
+  }
+  
+  /* Hide native file‐input; only show our “Choose Photo” button */
+#create-form input[type="file"] {
+    display: none;
+  }
+  
+  /* Make field‐error messages sit neatly below each form group */
+  .create-form__group .field-error {
+    display: block;      /* override the “display: none” default */
+    color: #E63946;      /* match your existing error color */
+    font-size: 0.875rem;
+    margin-top: 4px;
+  }
+
+ /* == Create‑Spot Form (“glass” style) == */
+.create-form {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  
+  /* hide the browser’s default file input */
+  #create-form input[type="file"],
+  #create-form input[type="file"] + /*your existing sibling selector*/ {
+    display: none;
+  }
+  
+  /* only show the “Choose Photo” button */
+  #create-form #trigger-file {
+    display: inline-block;
+  }
+  
+  /* keep all validation messages hidden until toggled via JS */
+  .create-form .field-error {
+    display: none;
+  }
+  
+  /* full‑width “Add Spot” button */
+  .create-form__btn {
+    width: 100%;
+  }
+  
+  /* == Rating widget: bigger stars, left→right fill == */
+  .rating {
+    display: flex;
+    flex-direction: row-reverse;   /* preserve the left-to-right fill logic */
+    justify-content: flex-end;     /* align the reversed row at the left */
+    font-size: 1.75rem;            /* bump up the star size */
+    gap: 4px;
+  }
+  .rating input {
+    display: none;
+  }
+  .rating label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+  }
+  .rating label:hover,
+  .rating label:hover ~ label,
+  .rating input:checked ~ label {
+    color: var(--clr-primary);
+  }
+
+  /* — Restore Category‑Pill Buttons — */
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  
+  .category-pill {
+    background: #fff;
+    border: 2px solid var(--clr-primary);
+    color: var(--clr-primary);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: var(--ff-body);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  
+  .category-pill--active {
+    background: var(--clr-primary);
+    color: white;
+  }
+  
+  .category-pill--custom::before {
+    content: "+ ";
+    font-weight: bold;
+  }
+  
+  /* — Center the Page Title — */
+  .create-spot-section > h2 {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+  
+  /* == Carousel Arrows == */
+.carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .carousel__track {
+    display: flex;
+    gap: var(--space-lg);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0 50px;
+    padding-bottom: var(--space-sm);
+  }
+  
+  .carousel__nav {
+    width: 40px;
+    height: 40px;
+    background-color: var(--clr-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin: 0 var(--space-xs);
+    z-index: 1;
+  }
+  
+  .carousel__nav:hover {
+    background-color: var(--clr-secondary);
+    transform: translateY(-2px);
+  }
+  
+  /* ensure arrows sit on top of slides */
+  .carousel__nav--prev { margin-right: -20px; }
+  .carousel__nav--next { margin-left: -20px; }
+  
+  /* Highlighted stars */
+.rating label.highlighted {
+  color: #E63946; /* Highlight color for selected stars */
+}
+
+
+
+/* ADDITIONAL STYLES */
+
+/* Map container styling */
+.map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Map title styling */
+.map-title {
+  text-align: center;
+  color: #E63946; /* Match the existing color scheme */
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  word-wrap: break-word; /* Ensure long titles wrap properly */
+}
+
+/* Map iframe styling */
+.map-iframe {
+  width: 100%; /* Make the iframe responsive */
+  max-width: 900px; /* Limit the maximum width */
+  height: 300px; /* Fixed height */
+  border: 0;
+  border-radius: 8px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+/* No map message styling */
+.no-map-message {
+  text-align: center;
+  color: #555;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+/* Placeholder message styling with floating animation */
+.no-map-message {
+  text-align: center;
+  color: #E63946; /* Match the existing color scheme */
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 20px;
+  animation: fadeIn 1s ease-in-out, float 3s ease-in-out infinite; /* Add fade-in and floating animations */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Move text up slightly */
+  }
+  100% {
+    transform: translateY(0); /* Return to original position */
+  }
+}
+
+/* Styling for the search button */
+.search-bar__btn {
+  background-color: #E63946; /* Primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px; /* Rounded corners for the button */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+}
+
+/* Hover effect for the search button */
+.search-bar__btn:hover {
+  background-color: #C72E3B; /* Slightly darker shade for hover effect */
+  transform: translateY(-2px); /* Subtle lift effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* Active state for the search button */
+.search-bar__btn:active {
+  background-color: #A5252F; /* Even darker shade for active state */
+  transform: translateY(0); /* Reset lift effect */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Reset shadow */
+}
+
+/* Disabled state for the search button */
+.search-bar__btn:disabled {
+  background-color: #ccc; /* Gray color for disabled state */
+  color: #666; /* Muted text color */
+  cursor: not-allowed;
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+/* Styling for the "View Details" button */
+.view-details-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #E63946; /* Primary color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+}
+
+.view-details-btn:hover {
+  background-color: #C72E3B; /* Slightly darker shade for hover effect */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.view-details-btn:active {
+  background-color: #A5252F; /* Even darker shade for active state */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+.view-details-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.5); /* Focus ring for accessibility */
+}
+
+

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover – D’Spot</title>
+  <link rel="stylesheet" href="../css/variables.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+  <script type="module" src="home.js" defer></script>
+</head>
+<body class="home-bg">
+  <!-- HEADER -->
+  <header class="ds-header">
+    <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
+      <img src="../assets/icons/menu.png" alt="Menu"/>
+    </button>
+    <a href="home.html" class="ds-header__logo">
+      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+    </a>
+    <div class="profile-dropdown">
+      <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
+        <img src="../assets/icons/profile.png" alt="Profile"/>
+      </button>
+      <div class="profile-dropdown__menu">
+        <div class="profile-dropdown__avatar">
+          <img src="../assets/icons/profile.png" alt="Your avatar"/>
+        </div>
+        <a href="../profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="settings.html" class="profile-dropdown__item">Settings</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav" id="side-nav">
+    <ul>
+      <li><a href="home.html" class="active">Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="favorites.html">Favorites</a></li>
+      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-container">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input
+        id="search-input"
+        class="search-bar__input"
+        type="text"
+        placeholder="Search for spots…"
+      />
+      <button id="search-btn" class="search-bar__btn btn-primary">
+        Search
+      </button>
+    </div>
+
+    <!-- Map Placeholder -->
+    <div id="map" class="map-placeholder"></div>
+
+    <!-- Featured Spots Carousel -->
+    <section class="featured-section">
+      <h2>Featured Spots</h2>
+      <div class="carousel">
+        <button class="carousel__nav carousel__nav--prev" aria-label="Previous">←</button>
+        <div class="carousel__track" id="carousel-track">
+          <!-- Dynamic carousel items will be inserted here -->
+        </div>
+        <button class="carousel__nav carousel__nav--next" aria-label="Next">→</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    // Sidebar toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sideNav = document.getElementById('side-nav');
+    menuBtn.addEventListener('click', () => {
+      sideNav.classList.toggle('side-nav--open');
+      document.body.classList.toggle('nav-open');
+    });
+
+    // Profile dropdown toggle
+    const profileBtn  = document.getElementById('profile-btn');
+    const profileWrap = document.querySelector('.profile-dropdown');
+    profileBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileWrap.classList.toggle('profile-dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      profileWrap.classList.remove('profile-dropdown--open');
+    });
+
+    // Log out action
+   /* document.getElementById('logout-btn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    }); */
+  </script>
+</body>
+</html>
+
+  

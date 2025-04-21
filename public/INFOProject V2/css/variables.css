@@ -1,0 +1,25 @@
+:root {
+    /* Colors */
+    --clr-primary:   #E63946;
+    --clr-secondary: #44AF50;
+    --clr-accent:    #FFBA08;
+    --clr-bg:        #F5F1EA;
+    --clr-text:      #333333;
+  
+    /* Typography */
+    --ff-heading: 'Poppins', sans-serif;
+    --ff-body:    'Inter', sans-serif;
+  
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+  
+    /* Login specific */
+    --login-bg-img: url('../assets/img/doubles.jpg');
+    --card-bg:      rgba(255,255,255,0.9);
+    --input-border: var(--clr-secondary);
+  }
+  

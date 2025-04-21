@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Favorites – D’Spot</title>
+  <link rel="stylesheet" href="../css/variables.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+</head>
+<body class="home-bg favorites-page">
+  <!-- HEADER -->
+  <header class="ds-header">
+    <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
+      <img src="../assets/icons/menu.png" alt="Menu"/>
+    </button>
+    <a href="home.html" class="ds-header__logo">
+      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+    </a>
+    <div class="profile-dropdown">
+      <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
+        <img src="../assets/icons/profile.png" alt="Profile"/>
+      </button>
+      <div class="profile-dropdown__menu">
+        <div class="profile-dropdown__avatar">
+          <img src="../assets/icons/profile.png" alt="Your avatar"/>
+        </div>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="settings.html" class="profile-dropdown__item">Settings</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav" id="side-nav">
+    <ul>
+      <li><a href="home.html">Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="favorites.html" class="active">Favorites</a></li>
+      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-container">
+    <h2>Your Favorites</h2>
+
+    <!-- 1. Empty state -->
+    <div id="empty-state" class="empty-state" style="display:none;">
+      <p>You haven’t favorited any spots yet.</p>
+      <a href="home.html" class="btn-primary">Browse Spots</a>
+    </div>
+
+    <!-- 4. Skeleton UI while loading -->
+    <div id="favorites-list" class="grid"></div>
+  </main>
+
+  <!-- 2. Toast container for “Removed” + Undo -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    // — NAV & DROPDOWN —
+    const menuBtn     = document.getElementById('menu-btn'),
+          sideNav     = document.getElementById('side-nav'),
+          profileBtn  = document.getElementById('profile-btn'),
+          profileWrap = document.querySelector('.profile-dropdown'),
+          logoutBtn   = document.getElementById('logout-btn');
+
+    menuBtn.addEventListener('click', () => {
+      sideNav.classList.toggle('side-nav--open');
+      document.body.classList.toggle('nav-open');
+    });
+    profileBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileWrap.classList.toggle('profile-dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      profileWrap.classList.remove('profile-dropdown--open');
+    });
+    logoutBtn.addEventListener('click', () => location.href = 'login.html');
+
+    // — UI Helpers —
+    const listEl      = document.getElementById('favorites-list'),
+          emptyState  = document.getElementById('empty-state'),
+          toastCt     = document.getElementById('toast-container');
+
+    // 4. show skeleton placeholders
+    function showSkeletons(count = 3) {
+      listEl.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const sk = document.createElement('div');
+        sk.className = 'card skeleton-card';
+        sk.innerHTML = `
+          <div class="skeleton-img"></div>
+          <div class="card__body">
+            <div class="skeleton-text short"></div>
+            <div class="skeleton-text long"></div>
+          </div>`;
+        listEl.appendChild(sk);
+      }
+    }
+
+    // stub API
+    async function fetchFavorites() {
+      // TODO: replace with firebaseAPI.getFavorites()
+      return new Promise(res => setTimeout(() => res([
+        { id:1, name:'Doubles Delight', img:'../assets/img/doubles.jpg', category:'Doubles', rating:4, distance:'0.5 mi' },
+        { id:2, name:'Roti King',      img:'../assets/img/rotiking.jpg',    category:'Roti',    rating:5, distance:'1.2 mi' }
+      ]), 1000));
+    }
+
+    // render page of favorites
+    async function loadFavorites() {
+      showSkeletons();
+      const favs = await fetchFavorites();
+      listEl.innerHTML = '';
+
+      // 1. empty state
+      if (favs.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      } else {
+        emptyState.style.display = 'none';
+      }
+
+      // 3. clickable cards
+      favs.forEach(spot => {
+        const a = document.createElement('a');
+        a.href = `spot.html?id=${spot.id}`;
+        a.className = 'card card--clickable';
+        a.innerHTML = `
+          <img src="${spot.img}" alt="${spot.name}" loading="lazy"/>
+          <div class="card__body">
+            <h3 class="card__header">${spot.name}</h3>
+            <p class="card__sub">
+              ${spot.category} • ${'★'.repeat(spot.rating)}${'☆'.repeat(5-spot.rating)} • ${spot.distance}
+            </p>
+            <div class="card__actions">
+              <button class="btn-secondary" data-action="remove">Remove</button>
+            </div>
+          </div>`;
+        listEl.appendChild(a);
+      });
+    }
+
+    // 2. show toast + undo
+    function showToast(msg, undoFn) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `${msg} <button class="toast-undo">Undo</button>`;
+      toastCt.appendChild(t);
+      t.querySelector('.toast-undo').addEventListener('click', () => {
+        undoFn();
+        t.remove();
+      });
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    // remove handler
+    listEl.addEventListener('click', e => {
+      if (!e.target.matches('button[data-action="remove"]')) return;
+      e.preventDefault();
+      const card = e.target.closest('.card'),
+            name = card.querySelector('.card__header').textContent;
+      card.remove();
+      showToast(`Removed ${name}`, loadFavorites);
+    });
+
+    loadFavorites();
+  </script>
+</body>
+</html>
+

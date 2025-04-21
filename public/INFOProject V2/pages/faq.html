@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs – D’Spot</title>
+  <link rel="stylesheet" href="../css/variables.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+</head>
+<body class="home-bg">
+  <!-- HEADER -->
+  <header class="ds-header">
+    <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
+      <img src="../assets/icons/menu.png" alt="Menu"/>
+    </button>
+    <a href="home.html" class="ds-header__logo">
+      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+    </a>
+    <div class="profile-dropdown">
+      <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
+        <img src="../assets/icons/profile.png" alt="Profile"/>
+      </button>
+      <div class="profile-dropdown__menu">
+        <div class="profile-dropdown__avatar">
+          <img src="../assets/icons/profile.png" alt="Your avatar"/>
+        </div>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="settings.html" class="profile-dropdown__item">Settings</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav" id="side-nav">
+    <ul>
+      <li><a href="home.html">Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="favorites.html">Favorites</a></li>
+      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="faq.html" class="active">FAQs</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-container">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-search">
+      <input id="faq-search" type="text" placeholder="Search FAQs…">
+    </div>
+
+    <section class="faq-section" id="faq-section">
+      <div class="faq-item">
+        <button class="faq-question">How do I add a new spot?</button>
+        <div class="faq-answer">
+          <p>Go to “Add Spot” from the sidebar, fill out all fields (including uploading a photo), then click “Add Spot.”</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Can I edit my spot later?</button>
+        <div class="faq-answer">
+          <p>Yes—visit “My Spots,” find the spot you want to change, click “Edit,” make your updates, and save.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">What do the star ratings mean?</button>
+        <div class="faq-answer">
+          <p>Ratings range from 1 (poor) to 5 (excellent). Click on a star when adding or editing a spot to set how you’d rate it.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">How do I add or remove a favorite?</button>
+        <div class="faq-answer">
+          <p>On any spot card, click the heart icon (★) to favorite it. To remove, click the heart again or go to “Favorites” and click “Remove.”</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Why isn’t my spot showing up on the map?</button>
+        <div class="faq-answer">
+          <p>Make sure you’ve given the app location permissions and that you entered a valid address. If issues persist, refresh or re-add with a precise location.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">How can I contact support?</button>
+        <div class="faq-answer">
+          <p>If you encounter bugs or have questions not covered here, email us at <a href="mailto:support@dspot.com">support@dspot.com</a> and we’ll get back to you within 24 hours.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    // — NAV & DROPDOWN —
+    const menuBtn     = document.getElementById('menu-btn');
+    const sideNav     = document.getElementById('side-nav');
+    const profileBtn  = document.getElementById('profile-btn');
+    const profileWrap = document.querySelector('.profile-dropdown');
+    const logoutBtn   = document.getElementById('logout-btn');
+
+    menuBtn.addEventListener('click', () => {
+      sideNav.classList.toggle('side-nav--open');
+      document.body.classList.toggle('nav-open');
+    });
+    profileBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileWrap.classList.toggle('profile-dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      profileWrap.classList.remove('profile-dropdown--open');
+    });
+    logoutBtn.addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    // — Accordion Toggle —
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.parentElement.classList.toggle('open');
+      });
+    });
+
+    // — Live Search —
+    const searchInput = document.getElementById('faq-search');
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const q = item.querySelector('.faq-question').textContent.toLowerCase();
+        item.style.display = q.includes(term) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

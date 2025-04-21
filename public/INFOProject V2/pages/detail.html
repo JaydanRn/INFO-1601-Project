@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spot Details – D’Spot</title>
+  <link rel="stylesheet" href="../css/variables.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/components.css"/>
+</head>
+<body class="home-bg favorites-page">
+  <!-- HEADER -->
+  <header class="ds-header">
+    <button id="menu-btn" class="ds-header__menu" aria-label="Open menu">
+      <img src="../assets/icons/menu.png" alt="Menu"/>
+    </button>
+    <a href="home.html" class="ds-header__logo">
+      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+    </a>
+    <div class="profile-dropdown">
+      <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
+        <img src="../assets/icons/profile.png" alt="Profile"/>
+      </button>
+      <div class="profile-dropdown__menu">
+        <div class="profile-dropdown__avatar">
+          <img src="../assets/icons/profile.png" alt="Your avatar"/>
+        </div>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <a href="settings.html" class="profile-dropdown__item">Settings</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav" id="side-nav">
+    <ul>
+      <li><a href="home.html">Spots</a></li>
+      <li><a href="myspots.html">My Spots</a></li>
+      <li><a href="favorites.html" class="active">Favorites</a></li>
+      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+    </ul>
+  </nav>
+
+
+
+  <script type="module">
+    // — NAV & DROPDOWN —
+    const menuBtn     = document.getElementById('menu-btn'),
+          sideNav     = document.getElementById('side-nav'),
+          profileBtn  = document.getElementById('profile-btn'),
+          profileWrap = document.querySelector('.profile-dropdown'),
+          logoutBtn   = document.getElementById('logout-btn');
+
+    menuBtn.addEventListener('click', () => {
+      sideNav.classList.toggle('side-nav--open');
+      document.body.classList.toggle('nav-open');
+    });
+    profileBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileWrap.classList.toggle('profile-dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      profileWrap.classList.remove('profile-dropdown--open');
+    });
+    logoutBtn.addEventListener('click', () => location.href = 'login.html');
+    </script>

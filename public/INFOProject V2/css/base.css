@@ -1,0 +1,37 @@
+/* Reset & Box‑Sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base Typography */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--ff-body);
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.5;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ff-heading);
+  margin-bottom: var(--space-md);
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}
