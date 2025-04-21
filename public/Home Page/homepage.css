@@ -66,7 +66,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding-left: 1em;
+  padding-right: 1em;
   background-color: white;
   border-bottom: 1px solid #ddd;
   position: sticky;
@@ -347,27 +348,27 @@ body {
 }
 
 /* Hover state */
-#search-btn:hover {
+#search-btn:hover, #logout-btn:hover {
   background-color: #c1121f;
   transform: translateY(-1px);
   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 /* Active/click state */
-#search-btn:active {
+#search-btn:active, #logout-btn:active {
   background-color: #a4161a;
   transform: translateY(0);
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Focus state (for accessibility) */
-#search-btn:focus {
+#search-btn:focus, #logout-btn:focus {
   outline: 2px solid #FFD60A;
   outline-offset: 2px;
 }
 
 /* Disabled state */
-#search-btn:disabled {
+#search-btn:disabled, #logout-btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
   transform: none;
@@ -438,5 +439,31 @@ body {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-5px) scale(1.01); }
   }
+}
+
+/* Centered Header */
+.centered-header {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.centered-header .app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333; /* Adjust color as needed */
+  text-decoration: none;
+}
+
+#logout-btn {
+  background-color: #E63946;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 

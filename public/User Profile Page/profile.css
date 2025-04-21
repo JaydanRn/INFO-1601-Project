@@ -1,0 +1,352 @@
+/* profile.css */
+/* === BASE STYLES === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F5F1EA;
+    color: #333;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    width: 250px;
+    background-color: #fff9eb;
+    padding: 1.5rem;
+    border-right: 1px solid #ddd;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.profile-summary {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-img-sm {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid #ff9900;
+}
+
+.username {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin-bottom: 0.25rem;
+}
+
+.email {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.sidebar li {
+    margin: 0.75rem 0;
+}
+
+.sidebar a {
+    color: #ff9900;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+.sidebar a:hover {
+    color: #E63946;
+}
+
+.sidebar a.active {
+    color: #E63946;
+    position: relative;
+}
+
+.sidebar a.active::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: #E63946;
+}
+
+.logout {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+#logout-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #E63946;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#logout-btn:hover {
+    background-color: #c1121f;
+}
+
+/* === MAIN CONTENT === */
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar.hidden ~ .main-content {
+    margin-left: 0;
+}
+
+/* Topbar */
+.topbar {
+    background-color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    position: absolute;
+    left: 1rem; /* Position the toggle button on the left */
+}
+
+.app-title {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin: 0;
+    text-align: center;
+    font-size: 1.8rem;
+    flex-grow: 1; /* Allow the title to take up available space */
+}
+
+.top-icons {
+    position: absolute;
+    right: 1rem; /* Position the top icons on the right */
+    display: flex;
+    gap: 1rem;
+}
+/* === PROFILE SECTION === */
+.profile-section {
+    padding: 2rem;
+    flex: 1;
+}
+
+.profile-header {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-img-container {
+    text-align: center;
+}
+
+.profile-img-lg {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ff9900;
+    margin-bottom: 1rem;
+}
+
+.edit-profile-btn {
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background-color: #e68a00;
+}
+
+.profile-info h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info .email {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.recent-activity {
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.recent-activity h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin-bottom: 1rem;
+}
+
+.activity-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    color: #666;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* === FOOTER === */
+footer {
+    background-color: white;
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+    border-top: 1px solid #ddd;
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        width: 220px;
+    }
+    
+    .main-content {
+        margin-left: 220px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.hidden {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .profile-section {
+        padding: 1rem;
+    }
+}
+
+.app-title {
+    font-family: 'Poppins', sans-serif;
+    color: #E63946;
+    margin: 0;
+    text-align: center;
+    font-size: 1.8rem;
+    flex-grow: 0; /* Prevent the title from growing */
+    flex-shrink: 0; /* Prevent the title from shrinking */
+}
+
+.app-title:hover{
+    cursor: pointer;
+}
+
+

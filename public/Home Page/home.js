@@ -49,8 +49,7 @@ function displaySpotIframe(iframeUrl, title) {
             <h3>${title}</h3>
             <div class="iframe-wrapper">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50340.14574169056!2d-61.48870166331491!3d10.25680082575473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c358c59e3c3469b%3A0x63b1082bc49d3bb1!2sRising%20Star!5e0!3m2!1sen!2stt!4v1745125043624!5m2!1sen!2stt" 
-                    width="600px" 
+                    src="${iframeUrl}"
                     height="375"
                     style="border:0;" 
                     allowfullscreen="" 

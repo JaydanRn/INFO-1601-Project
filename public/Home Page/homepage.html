@@ -12,15 +12,10 @@
     <aside class="sidebar hidden" id="sidebar">
         <nav>
             <ul>
-                <li>Hot Spots</li>
-                <li>Posts</li>
-                <li>Near You</li>
                 <li><a href="../Favorites/favorites.html">Favorites</a></li>
                 <li><a href="../newspot-spotdetail/newspot.html">Create Spot</a></li>
-                <li>Leaderboard</li>
                 <li><a href="../faq/faq.html">FAQs</a></li>
             </ul>
-            <div class="settings">⚙️ Settings</div>
         </nav>
     </aside>
 
@@ -30,19 +25,15 @@
         <header class="topbar">
             <div class="nav-left">
                 <button class="menu-toggle" id="menuToggle">☰</button>
-                <h1 class="app-title" onclick="location.href='../Home Page/homepage.html'">D’ Spot</h1>
             </div>
 
-            <div class="nav-links">
-                <a href="../Favorites/favorites.html">Favorites</a>
-                <a href="../newspot-spotdetail/newspot.html">Create</a>
-                <a href="#">Leaderboard</a>
-                <a href="../faq/faq.html">FAQs</a>
-            </div>
+            <!-- Centered D'Spot Heading -->
+            <h1 class="app-title" onclick="location.href='../Home Page/homepage.html'">D’ Spot</h1>
 
+            <!-- Top Icons -->
             <div class="top-icons">
                 <button title="Random Spot">✨</button>
-                <a href="#" title="Profile">👤</a>
+                <a href="../User Profile Page/profile.html" title="Profile">👤</a>
                 <button id="logout-btn" title="Logout">🚪 Logout</button>
             </div>
         </header>
@@ -54,9 +45,9 @@
         </div>
 
         <!-- Map Placeholder -->
-            <div class="map-placeholder" id="map-placeholder">
-                <p class="placeholder-message">Click a spot image to view its location on the map.</p>
-            </div>
+        <div class="map-placeholder" id="map-placeholder">
+            <p class="placeholder-message">Click a spot image to view its location on the map.</p>
+        </div>
 
         <!-- Featured Spots Carousel -->
         <section class="carousel">

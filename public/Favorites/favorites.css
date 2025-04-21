@@ -100,6 +100,11 @@ body {
 .nav-links a:hover {
   text-decoration: underline;
 }
+
+li:hover{
+  text-decoration: underline;
+}
+
 .top-icons button,
 .top-icons a {
   margin-left: 1rem;
@@ -376,6 +381,10 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #E63946;
   margin-bottom: 1rem;
+}
+
+.container{
+  margin-left: 1.5em;
 }
 
 

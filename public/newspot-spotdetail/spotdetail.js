@@ -121,22 +121,13 @@ async function fetchComments() {
         const commentsSnapshot = await getDoc(commentsRef);
 
         if (commentsSnapshot.exists()) {
-            const commentsData = commentsSnapshot.data();
+            const commentsData = commentsSnapshot.data().comments || [];
 
             // Display each comment
-            for (const [userId, comment] of Object.entries(commentsData)) {
-                // Fetch the username for the userId
-                const userRef = doc(db, "users", userId);
-                const userSnapshot = await getDoc(userRef);
-
-                let username = userId; // Default to userId if username is not found
-                if (userSnapshot.exists()) {
-                    username = userSnapshot.data().username || userId;
-                }
-
+            for (const comment of commentsData) {
                 const commentDiv = document.createElement("div");
                 commentDiv.classList.add("comment");
-                commentDiv.innerHTML = `<p><strong>@${username}:</strong> ${comment}</p>`;
+                commentDiv.innerHTML = `<p><strong>@${comment.user}:</strong> ${comment.text}</p>`;
                 commentsSection.appendChild(commentDiv);
             }
         } else {
@@ -174,31 +165,79 @@ async function fetchComments() {
     }
 }
 
+// Function to display a custom notification
+function displayNotification(message, type) {
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+
+    // Append the notification to the body
+    document.body.appendChild(notification);
+
+    // Automatically remove the notification after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
 // Submit a new comment
 async function submitComment(userId, commentText) {
     if (!commentText.trim()) {
-        alert("Comment cannot be empty!");
+        displayNotification("Comment cannot be empty!", "error");
         return;
     }
 
     try {
         const commentsRef = doc(db, "comments", spotId);
 
-        // Update the comments document with the new comment
-        await updateDoc(commentsRef, {
-            [userId]: commentText
-        }, { merge: true });
+        // Fetch the username for the current user
+        const userRef = doc(db, "users", userId);
+        const userSnapshot = await getDoc(userRef);
 
-        alert("Comment posted!");
+        let username = userId; // Default to userId if username is not found
+        if (userSnapshot.exists()) {
+            username = userSnapshot.data().username || userId;
+        }
+
+        // Retrieve the existing comments
+        const commentsSnapshot = await getDoc(commentsRef);
+        let commentsData = [];
+
+        if (commentsSnapshot.exists()) {
+            commentsData = commentsSnapshot.data().comments || [];
+        }
+
+        // Create a new comment object
+        const newComment = {
+            user: username, // Store the username instead of userId
+            text: commentText, // Store the comment text
+            timestamp: new Date(),// Add a timestamp
+        };
+
+        // Append the new comment to the existing comments array
+        commentsData.push(newComment);
+
+        // Update the comments document with the new array
+        await updateDoc(commentsRef, {
+            comments: commentsData
+        });
+
+        displayNotification("Comment posted successfully!", "success");
         fetchComments(); // Refresh the comments section
     } catch (error) {
         console.error("Error posting comment:", error);
-        alert("Failed to post comment. Please try again.");
+        displayNotification("Failed to post comment. Please try again.", "error");
     }
 }
 
+// Call the function to fetch and display spot details
+fetchSpotDetails();
+
+// Call the function to fetch and display comments
+fetchComments();
+
 // Handle comment form submission
-document.querySelector(".comment-form").addEventListener("submit", (event) => {
+/*document.querySelector(".comment-form").addEventListener("submit", (event) => {
     event.preventDefault();
 
     const commentInput = event.target.querySelector("input");
@@ -213,9 +252,4 @@ document.querySelector(".comment-form").addEventListener("submit", (event) => {
         }
     });
 });
-
-// Call the function to fetch and display spot details
-fetchSpotDetails();
-
-// Call the function to fetch and display comments
-fetchComments();
+*/

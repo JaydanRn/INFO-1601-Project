@@ -8,60 +8,83 @@
   <script type="module" src="newspot.js" defer></script>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo">
-      <img src="assets/logo.svg" alt="D' Spot Logo" class="logo-img" />
-      <h1>D’ Spot</h1>
-    </div>
+  <!-- Sidebar -->
+  <aside class="sidebar hidden" id="sidebar">
     <nav>
       <ul>
         <li><a href="../Home Page/homepage.html">Home</a></li>
-        <li><a href="newspot.html">Create</a></li>
-        <li><a href="saved.html">Saved</a></li>
-        <li><a href="profile.html">Profile</a></li>
+        <li><a href="../newspot-spotdetail/newspot.html">Create Spot</a></li>
+        <li><a href="../Favorites/favorites.html">Favourites</a></li>
+        <li><a href="../faq/faq.html">FAQs</a></li>
       </ul>
     </nav>
-  </header>
+  </aside>
 
-  <!-- Add Spot Form -->
-  <section class="form-section">
-    <h2>Add a New Spot</h2>
-    <form class="add-spot-form" id="addspotform">
-      <!--<label for="image">Upload Picture</label>
-      <input type="file" id="image" name="image" accept="image/*" />
-    -->
-      <label for="name">Spot Name</label>
-      <input type="text" id="name" name="name" placeholder="e.g., Roti King" required />
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <header class="topbar">
+      <!-- Sidebar Toggle Button -->
+      <button class="menu-toggle" id="menuToggle">☰</button>
 
-      <label for="location">Location</label>
-      <input type="text" id="location" name="location" placeholder="e.g., Curepe Junction" required />
+      <!-- Centered D'Spot Logo -->
+      <h1 class="app-title" onclick="location.href='../Home Page/homepage.html'">D’ Spot</h1>
 
-      <label for="embed">Embed</label>
-      <input type="text" id="embed" name="embed" placeholder="e.g., <iframe src=" required />
+      <!-- Top Icons -->
+      <div class="top-icons">
+        <button title="Random Spot">✨</button>
+        <a href="#" title="Profile">👤</a>
+        <button id="logout-btn" title="Logout">🚪 Logout</button>
+      </div>
+    </header>
 
+    <!-- Add Spot Form -->
+    <section class="form-section">
+      <h2>Add a New Spot</h2>
+      <form class="add-spot-form" id="addspotform">
+        <label for="name">Spot Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g., Roti King" required />
 
-      <label for="category">Category</label>
-      <select id="category" name="category">
-        <option>Doubles</option>
-        <option>Roti</option>
-        <option>Bake & Cheese</option>
-        <option>Souse</option>
-        <option>Other</option>
-      </select>
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" placeholder="e.g., Curepe Junction" required />
 
-      <label for="rating">Rating</label>
-      <input type="number" id="rating" name="rating" min="1" max="5" step="0.1" placeholder="e.g., 4.5" required />
+        <label for="embed">Embed</label>
+        <input type="text" id="embed" name="embed" placeholder="e.g., <iframe src=" required />
 
-      <label for="description">Description</label>
-      <textarea id="description" name="description" rows="4" placeholder="Tell us about the vibe, food, and service!"></textarea>
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option>Doubles</option>
+          <option>Roti</option>
+          <option>Bake & Cheese</option>
+          <option>Souse</option>
+          <option>Other</option>
+        </select>
 
-      <button type="submit" id="addspot" class="primary-btn">➕ Add Spot</button>
-    </form>
-  </section>
+        <label for="rating">Rating</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" step="0.1" placeholder="e.g., 4.5" required />
 
-  <footer>
-    <p>&copy; 2025 D’ Spot. All rights reserved.</p>
-  </footer>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" placeholder="Tell us about the vibe, food, and service!"></textarea>
+
+        <button type="submit" id="addspot" class="primary-btn">➕ Add Spot</button>
+      </form>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 D’ Spot. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Sidebar toggle functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      mainContent.classList.toggle('expanded');
+    });
+  </script>
 </body>
 </html>

@@ -406,3 +406,54 @@ body {
 .comment-form button:hover {
     background-color: #b22234;
 }
+
+/* Notification Styles */
+.notification {
+  position: absolute; /* Position relative to the spot-detail section */
+  top: 10px; /* Place it at the top of the spot-detail section */
+  left: 50%; /* Center horizontally within the spot-detail section */
+  transform: translateX(-50%); /* Adjust for centering */
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: white;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+  text-align: center;
+}
+
+/* Success Notification */
+.notification.success {
+  background-color: #E63946; /* Red for success (aligned with your theme) */
+  color: #fff; /* White text */
+}
+
+/* Error Notification */
+.notification.error {
+  background-color: #ff9900; /* Orange for error (aligned with your theme) */
+  color: #fff; /* White text */
+}
+
+/* Fade-in and fade-out animations */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px); /* Slightly above */
+  }
+  to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0); /* Centered */
+  }
+}
+
+@keyframes fadeOut {
+  from {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0); /* Centered */
+  }
+  to {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px); /* Slightly above */
+  }
+}

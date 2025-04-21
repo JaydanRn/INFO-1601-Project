@@ -47,7 +47,10 @@ document.getElementById("addspot").addEventListener("click", async (event) => {
         await setDoc(doc(db, "spots", spotId), spotData);
 
         // Initialize an empty comments document for the spot
-        await setDoc(doc(db, "comments", spotId), {}); // Create an empty document in the 'comments' collection
+        const commentsData = {
+            comments: [] // Initialize with an empty array for comments
+        };
+        await setDoc(doc(db, "comments", spotId), commentsData); // Create a document in the 'comments' collection
     
         console.log("Document written with ID: ", spotId);
     
