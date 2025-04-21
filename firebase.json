@@ -4,7 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public/INFOProject V2/pages",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -12,9 +12,11 @@
     ],
     "rewrites": [
       {
-        "source": "/",
-        "destination": "/login.html"
+        "source": "**",
+        "destination": "/pages/login.html"
       }
-    ]
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
   }
 }
