@@ -91,26 +91,20 @@ async function fetchUserComments(userId) {
   }
 }
 
-// Edit Profile Functionality
+// Edit Profile Functionality (Username only)
 function setupEditProfile(userId) {
   editProfileBtn.addEventListener("click", () => {
     const currentName = profileNameEl.textContent;
-    const currentEmail = profileEmailEl.textContent;
 
-    // Create input fields
+    // Create input field for username only
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.value = currentName;
     nameInput.className = "profile-edit-input";
+    nameInput.placeholder = "Enter new username";
 
-    const emailInput = document.createElement("input");
-    emailInput.type = "email";
-    emailInput.value = currentEmail;
-    emailInput.className = "profile-edit-input";
-
-    // Replace text with inputs
+    // Replace name with input
     profileNameEl.replaceWith(nameInput);
-    profileEmailEl.replaceWith(emailInput);
 
     // Create save/cancel buttons
     const buttonContainer = document.createElement("div");
@@ -132,43 +126,32 @@ function setupEditProfile(userId) {
     // Save handler
     saveBtn.addEventListener("click", async () => {
       const newName = nameInput.value.trim();
-      const newEmail = emailInput.value.trim();
 
       if (!newName) {
         alert("Username cannot be empty");
         return;
       }
 
-      if (!newEmail || !newEmail.includes("@")) {
-        alert("Please enter a valid email");
-        return;
-      }
-
       try {
         await updateDoc(doc(db, "users", userId), {
-          username: newName,
-          email: newEmail
+          username: newName
         });
 
         // Update UI
         profileNameEl.textContent = newName;
-        profileEmailEl.textContent = newEmail;
-
         nameInput.replaceWith(profileNameEl);
-        emailInput.replaceWith(profileEmailEl);
         buttonContainer.replaceWith(editProfileBtn);
 
-        showToast("Profile updated successfully!");
+        showToast("Username updated successfully!");
       } catch (error) {
-        console.error("Error updating profile:", error);
-        alert("Failed to update profile. Please try again.");
+        console.error("Error updating username:", error);
+        alert("Failed to update username. Please try again.");
       }
     });
 
     // Cancel handler
     cancelBtn.addEventListener("click", () => {
       nameInput.replaceWith(profileNameEl);
-      emailInput.replaceWith(profileEmailEl);
       buttonContainer.replaceWith(editProfileBtn);
     });
   });

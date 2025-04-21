@@ -8,103 +8,90 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-document.getElementById("create-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+// Available demo images
+const DEMO_IMAGES = [
+  '../assets/img/burger.jpg',
+  '../assets/img/cake.jpg',
+  '../assets/img/chicken.jpg',
+  '../assets/img/roti.jpg',
+  '../assets/img/bake.jpg',
+  '../assets/img/doubles.jpg',
+  '../assets/img/pie.jpg',
+  '../assets/img/gyro.jpg',
+  '../assets/img/pizza.jpg',
+];
+
+// Get random image
+function getRandomImage() {
+  return DEMO_IMAGES[Math.floor(Math.random() * DEMO_IMAGES.length)];
+}
+
+// Form submission
+document.getElementById("create-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
   // Get form values
   const spotName = document.getElementById("spot-name").value.trim();
   const location = document.getElementById("spot-location").value.trim();
   const embed = document.getElementById("spot-embed").value.trim();
   const description = document.getElementById("spot-description").value.trim();
+  const category = document.getElementById("spot-category").value || 
+                   document.getElementById("spot-category-custom").value.trim();
+  const rating = document.querySelector('input[name="rating"]:checked')?.value;
 
-  // Get category
-  const categoryInput = document.getElementById("spot-category");
-  const customCategoryInput = document.getElementById("spot-category-custom");
-  const category = categoryInput.value || customCategoryInput.value.trim();
-
-  // Get rating
-  const ratingInputs = document.querySelectorAll('.rating input[name="rating"]');
-  let rating = 0;
-  ratingInputs.forEach((input) => {
-    if (input.checked) {
-      rating = parseInt(input.value, 10); // Get the selected rating value
-    }
-  });
-
-  // Validate form fields
-  if (!spotName || !location || !embed || !description || !category || rating === 0) {
-    alert("Please fill out all fields and select a rating before submitting.");
+  // Validate
+  if (!spotName || !location || !embed || !description || !category || !rating) {
+    alert("Please fill all required fields");
     return;
   }
 
-  // Check if the user is logged in
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      alert("You must be logged in to create a spot.");
+      alert("You must be logged in to create spots");
       return;
     }
 
-    const spotData = {
-      name: spotName,
-      location: location,
-      embed: embed,
-      category: category,
-      rating: rating,
-      description: description,
-      createdAt: new Date(), // Add a timestamp
-      user: user.uid, // Add the user ID of the creator
-    };
-
     try {
-      // Generate a unique ID for the spot
-      const spotId = spotName.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(); // Example: "spot-name-1681234567890"
+      const spotId = `${spotName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
+      const spotData = {
+        name: spotName,
+        location,
+        embed,
+        category,
+        rating: parseInt(rating),
+        description,
+        image: getRandomImage(), // Assign random image
+        createdAt: new Date(),
+        user: user.uid
+      };
 
-      // Add a new document with the generated ID to the "spots" collection
       await setDoc(doc(db, "spots", spotId), spotData);
+      await setDoc(doc(db, "comments", spotId), { comments: {} });
 
-      // Initialize the comments collection for the new spot
-      await setDoc(doc(db, "comments", spotId), {
-        comments: {}, // Initialize with an empty comments map
+      showToast("Spot created successfully!");
+      document.getElementById("create-form").reset();
+      
+      // Reset UI
+      document.querySelectorAll('.rating label').forEach(label => {
+        label.classList.remove('highlighted');
       });
-
-      console.log("Document written with ID: ", spotId);
-
-      // Show success message
-      showToast("Spot added successfully!");
-
-      // Reset the form
-      const form = document.getElementById("create-form");
-      form.reset();
-
-      // Reset the stars to default color
-      const ratingLabels = document.querySelectorAll(".rating label");
-      ratingLabels.forEach((label) => {
-        label.classList.remove("highlighted");
+      document.querySelectorAll('.category-pill').forEach(pill => {
+        pill.classList.remove('category-pill--active');
       });
+      document.getElementById('custom-category-input').style.display = 'none';
 
-      // Reset the category to none selected
-      const categoryPills = document.querySelectorAll(".category-pill");
-      categoryPills.forEach((pill) => {
-        pill.classList.remove("category-pill--active");
-      });
-      categoryInput.value = ""; // Clear the hidden input value
-      customCategoryInput.value = ""; // Clear the custom category input
-      customCategoryInput.style.display = "none"; // Hide the custom category input
-
-      // Optional: Redirect or update UI
-      // window.location.href = "/success-page.html";
     } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Error adding spot: " + error.message);
+      console.error("Error creating spot:", error);
+      showToast("Failed to create spot");
     }
   });
 });
 
-// === Toast ===
-function showToast(msg) {
-  const t = document.createElement("div");
-  t.className = "toast";
-  t.textContent = msg;
-  document.getElementById("toast-container").appendChild(t);
-  setTimeout(() => t.remove(), 3000);
+// Toast notification
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }

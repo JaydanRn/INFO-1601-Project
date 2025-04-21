@@ -69,11 +69,11 @@
     color: white;
   }
 
-  .card__actions button[data-action="edit"] {
+  .card__actions button[data-action="edit"], .btn-secondary[data-action="save"] {
     border-color: var(--clr-secondary);
     color: var(--clr-secondary);
   }
-  .card__actions button[data-action="edit"]:hover {
+  .card__actions button[data-action="edit"]:hover, .btn-secondary[data-action="save"]:hover {
     background: var(--clr-secondary);
     color: white;
   }
