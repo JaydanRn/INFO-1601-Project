@@ -1,10 +1,12 @@
 import firebaseConfig from "/public/firebaseConfig.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 document.getElementById("create-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -35,56 +37,65 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
     return;
   }
 
-  const spotData = {
-    name: spotName,
-    location: location,
-    embed: embed,
-    category: category,
-    rating: rating,
-    description: description,
-    createdAt: new Date(), // Add a timestamp
-  };
+  // Check if the user is logged in
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      alert("You must be logged in to create a spot.");
+      return;
+    }
 
-  try {
-    // Generate a unique ID for the spot
-    const spotId = spotName.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(); // Example: "spot-name-1681234567890"
+    const spotData = {
+      name: spotName,
+      location: location,
+      embed: embed,
+      category: category,
+      rating: rating,
+      description: description,
+      createdAt: new Date(), // Add a timestamp
+      user: user.uid, // Add the user ID of the creator
+    };
 
-    // Add a new document with the generated ID to the "spots" collection
-    await setDoc(doc(db, "spots", spotId), spotData);
+    try {
+      // Generate a unique ID for the spot
+      const spotId = spotName.toLowerCase().replace(/\s+/g, "-") + "-" + Date.now(); // Example: "spot-name-1681234567890"
 
-    // Initialize the comments collection for the new spot
-    await setDoc(doc(db, "comments", spotId), {
-      comments: {} // Initialize with an empty comments map
-    });
+      // Add a new document with the generated ID to the "spots" collection
+      await setDoc(doc(db, "spots", spotId), spotData);
 
-    console.log("Document written with ID: ", spotId);
+      // Initialize the comments collection for the new spot
+      await setDoc(doc(db, "comments", spotId), {
+        comments: {}, // Initialize with an empty comments map
+      });
 
-    // Show success message
-    alert("Spot added successfully!");
+      console.log("Document written with ID: ", spotId);
 
-    // Reset the form
-    const form = document.getElementById("create-form");
-    form.reset();
+      // Show success message
+      alert("Spot added successfully!");
 
-    // Reset the stars to default color
-    const ratingLabels = document.querySelectorAll(".rating label");
-    ratingLabels.forEach((label) => {
-      label.classList.remove("highlighted");
-    });
+      // Reset the form
+      const form = document.getElementById("create-form");
+      form.reset();
 
-    // Reset the category to none selected
-    const categoryPills = document.querySelectorAll(".category-pill");
-    categoryPills.forEach((pill) => {
-      pill.classList.remove("category-pill--active");
-    });
-    categoryInput.value = ""; // Clear the hidden input value
-    customCategoryInput.value = ""; // Clear the custom category input
-    customCategoryInput.style.display = "none"; // Hide the custom category input
+      // Reset the stars to default color
+      const ratingLabels = document.querySelectorAll(".rating label");
+      ratingLabels.forEach((label) => {
+        label.classList.remove("highlighted");
+      });
 
-    // Optional: Redirect or update UI
-    // window.location.href = "/success-page.html";
-  } catch (error) {
-    console.error("Error adding document: ", error);
-    alert("Error adding spot: " + error.message);
-  }
+      // Reset the category to none selected
+      const categoryPills = document.querySelectorAll(".category-pill");
+      categoryPills.forEach((pill) => {
+        pill.classList.remove("category-pill--active");
+      });
+      categoryInput.value = ""; // Clear the hidden input value
+      customCategoryInput.value = ""; // Clear the custom category input
+      customCategoryInput.style.display = "none"; // Hide the custom category input
+
+      // Optional: Redirect or update UI
+      // window.location.href = "/success-page.html";
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      alert("Error adding spot: " + error.message);
+    }
+  });
 });
