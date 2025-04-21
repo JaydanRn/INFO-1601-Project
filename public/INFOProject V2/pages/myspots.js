@@ -29,6 +29,19 @@ async function fetchSpots(userId) {
 // Render spots on the page
 function renderPage() {
   const listEl = document.getElementById("spots-list");
+  const emptyState = document.getElementById("empty-state");
+  
+  // Clear existing spots
+  listEl.innerHTML = "";
+  
+  if (allSpots.length === 0) {
+    emptyState.style.display = "block";
+    document.getElementById("load-more").style.display = "none";
+    return;
+  } else {
+    emptyState.style.display = "none";
+  }
+
   const start = currentPage * perPage;
   const pageSpots = allSpots.slice(start, start + perPage);
 
@@ -41,7 +54,7 @@ function renderPage() {
       <div class="card__body">
         <h3 class="card__header">${spot.name}</h3>
         <p class="card__sub">
-          ${spot.category} • ${"★".repeat(spot.rating || 0)}${"☆".repeat(5 - (spot.rating || 0))} • ${spot.location}
+          ${spot.category} • ${"★".repeat(spot.rating || 0)}${"☆".repeat(5 - (spot.rating || 0))} • ${spot.location}
         </p>
         <div class="card__actions">
           <button class="btn-secondary" data-action="edit">Edit</button>
@@ -53,6 +66,8 @@ function renderPage() {
 
   if ((currentPage + 1) * perPage >= allSpots.length) {
     document.getElementById("load-more").style.display = "none";
+  } else {
+    document.getElementById("load-more").style.display = "block";
   }
 }
 
@@ -64,6 +79,7 @@ async function init() {
       renderPage();
     } else {
       alert("You must be logged in to view your spots.");
+      window.location.href = "login.html";
     }
   });
 }
@@ -105,6 +121,11 @@ confirmBtn.addEventListener("click", async () => {
     allSpots = allSpots.filter((s) => s.id !== deleteId);
     modal.classList.remove("open");
     showToast("Spot deleted");
+    
+    // Check if we need to show empty state after deletion
+    if (allSpots.length === 0) {
+      renderPage();
+    }
   } catch (error) {
     console.error("Error deleting spot:", error);
     alert("Failed to delete spot. Please try again.");

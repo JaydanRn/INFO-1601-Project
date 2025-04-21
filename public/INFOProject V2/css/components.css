@@ -61,10 +61,19 @@
     color: white;
   }
   .card__actions button[data-action="delete"] {
+    border-color: var(--clr-primary);
+    color: var(--clr-primary);
+  }
+  .card__actions button[data-action="delete"]:hover {
+    background: var(--clr-primary);
+    color: white;
+  }
+
+  .card__actions button[data-action="edit"] {
     border-color: var(--clr-secondary);
     color: var(--clr-secondary);
   }
-  .card__actions button[data-action="delete"]:hover {
+  .card__actions button[data-action="edit"]:hover {
     background: var(--clr-secondary);
     color: white;
   }
@@ -1322,4 +1331,85 @@ body.auth-page {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
+}
+
+/* Profile Edit Styles */
+.profile-edit-input {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 2px solid var(--clr-primary);
+  border-radius: 4px;
+  font-family: var(--ff-body);
+  font-size: 1rem;
+}
+
+.profile-edit-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.profile-edit-buttons button {
+  padding: 0.5rem 1rem;
+}
+
+/* Profile Page Specific Styles */
+.profile-page .profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-page .profile-avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--clr-primary);
+}
+
+.profile-page .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-page .profile-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-page .profile-email {
+  color: var(--clr-neutral-dark);
+  margin-bottom: 0.5rem;
+}
+
+.profile-page .profile-created {
+  color: var(--clr-neutral-dark);
+  margin-bottom: 1rem;
+}
+
+.profile-page .profile-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 0;
+}
+
+.profile-page .stat {
+  text-align: center;
+}
+
+.profile-page .stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--clr-primary);
+  display: block;
+}
+
+.profile-page .stat-label {
+  font-size: 0.9rem;
+  color: var(--clr-neutral-dark);
 }

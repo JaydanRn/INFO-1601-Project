@@ -70,7 +70,7 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
       console.log("Document written with ID: ", spotId);
 
       // Show success message
-      alert("Spot added successfully!");
+      showToast("Spot added successfully!");
 
       // Reset the form
       const form = document.getElementById("create-form");
@@ -99,3 +99,12 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
     }
   });
 });
+
+// === Toast ===
+function showToast(msg) {
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.textContent = msg;
+  document.getElementById("toast-container").appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}

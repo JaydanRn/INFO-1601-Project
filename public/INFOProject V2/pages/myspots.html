@@ -3,11 +3,28 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Spots – D’Spot</title>
+  <title>My Spots – D'Spot</title>
   <link rel="stylesheet" href="../css/variables.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/components.css"/>
   <script type="module" src="myspots.js" defer></script>
+  <style>
+    .empty-state {
+      text-align: center;
+      padding: var(--space-lg);
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: var(--space-lg) auto;
+      max-width: 400px;
+    }
+    
+    .empty-state p {
+      margin-bottom: var(--space-md);
+      font-size: 1.1rem;
+      color: var(--clr-neutral-dark);
+    }
+  </style>
 </head>
 <body class="home-bg">
   <!-- HEADER -->
@@ -16,7 +33,7 @@
       <img src="../assets/icons/menu.png" alt="Menu"/>
     </button>
     <a href="home.html" class="ds-header__logo">
-      <img src="../assets/img/logo.png" alt="D’Spot Logo" class="ds-logo-img"/>
+      <img src="../assets/img/logo.png" alt="D'Spot Logo" class="ds-logo-img"/>
     </a>
     <div class="profile-dropdown">
       <button id="profile-btn" class="ds-header__profile" aria-label="Profile">
@@ -26,8 +43,8 @@
         <div class="profile-dropdown__avatar">
           <img src="../assets/icons/profile.png" alt="Your avatar"/>
         </div>
-        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
-        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
+        <a href="profile.html" class="profile-dropdown__item">My Profile</a>
+        <button id="logout-btn" class="profile-dropdown__item">Log Out</button>
       </div>
     </div>
   </header>
@@ -36,18 +53,27 @@
   <nav class="side-nav" id="side-nav">
     <ul>
       <li><a href="home.html">Spots</a></li>
-      <li><a href="myspots.html" class="active">My Spots</a></li>
+      <li><a href="myspots.html" class="active">My Spots</a></li>
       <li><a href="favorites.html">Favorites</a></li>
-      <li><a href="create.html">Add Spot</a></li>
+      <li><a href="create.html">Add Spot</a></li>
       <li><a href="faq.html">FAQs</a></li>
     </ul>
   </nav>
 
   <!-- MAIN CONTENT -->
   <main class="page-container">
-    <h2>My Spots</h2>
+    <h2>My Spots</h2>
+    
+    <!-- Empty State (hidden by default) -->
+    <div id="empty-state" class="empty-state" style="display:none;">
+      <p>You haven't added any spots yet.</p>
+      <a href="create.html" class="btn-primary">Add Your First Spot</a>
+    </div>
+    
+    <!-- Spots List -->
     <div id="spots-list"></div>
 
+    <!-- Load More Button -->
     <div class="load-more-container">
       <button id="load-more" class="load-more-btn">Load More</button>
     </div>
@@ -68,7 +94,7 @@
   <div id="toast-container" class="toast-container"></div>
 
   <script type="module">
-    // -- side‑nav toggle --
+    // Sidebar toggle
     const menuBtn = document.getElementById('menu-btn');
     const sideNav = document.getElementById('side-nav');
     menuBtn.addEventListener('click', () => {
@@ -76,7 +102,7 @@
       document.body.classList.toggle('nav-open');
     });
 
-    // -- profile dropdown toggle --
+    // Profile dropdown toggle
     const profileBtn  = document.getElementById('profile-btn');
     const profileWrap = document.querySelector('.profile-dropdown');
     profileBtn.addEventListener('click', e => {
@@ -86,147 +112,11 @@
     document.addEventListener('click', () => {
       profileWrap.classList.remove('profile-dropdown--open');
     });
+
+    // Log out action
     document.getElementById('logout-btn').addEventListener('click', () => {
       window.location.href = 'login.html';
     });
-
-    // === data & pagination ===
- /*   let allSpots = [];
-    let currentPage = 0;
-    const perPage = 5;
-
-    async function fetchSpots() {
-      // TODO: replace with: await firebaseAPI.getMySpots()
-      return [
-        ...Array.from({length:8}, (_,i)=>({
-          id: i+1,
-          name: `Spot ${i+1}`,
-          img: '../assets/img/doubles.jpg',
-          category: ['Doubles','Roti','Curry'][i%3],
-          rating: (i%5)+1,
-          distance: `${(Math.random()*2).toFixed(1)} mi`
-        }))
-      ];
-    }
-
-    function renderPage() {
-      const listEl = document.getElementById('spots-list');
-      const start = currentPage * perPage;
-      const pageSpots = allSpots.slice(start, start + perPage);
-
-      pageSpots.forEach(spot => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.id = spot.id;
-        card.innerHTML = `
-          <img src="${spot.img}" alt="${spot.name}">
-          <div class="card__body">
-            <h3 class="card__header">${spot.name}</h3>
-            <p class="card__sub">
-              ${spot.category} • ${'★'.repeat(spot.rating)}${'☆'.repeat(5-spot.rating)} • ${spot.distance}
-            </p>
-            <div class="card__actions">
-              <button class="btn-secondary" data-action="edit">Edit</button>
-              <button class="btn-secondary" data-action="delete">Delete</button>
-            </div>
-          </div>`;
-        listEl.appendChild(card);
-      });
-
-      if ((currentPage+1)*perPage >= allSpots.length) {
-        document.getElementById('load-more').style.display = 'none';
-      }
-    }
-
-    async function init() {
-      allSpots = await fetchSpots();
-      renderPage();
-    }
-
-    document.getElementById('load-more').addEventListener('click', () => {
-      currentPage++;
-      renderPage();
-    });
-
-    // === delete modal & toast ===
-    let deleteId = null;
-    const modal      = document.getElementById('delete-modal');
-    const cancelBtn  = document.getElementById('cancel-delete');
-    const confirmBtn = document.getElementById('confirm-delete');
-
-    document.getElementById('spots-list').addEventListener('click', e => {
-      const btn = e.target.closest('button[data-action]');
-      if (!btn) return;
-      const id = btn.closest('.card').dataset.id;
-      if (btn.dataset.action === 'delete') {
-        deleteId = id;
-        modal.classList.add('open');
-      }
-      if (btn.dataset.action === 'edit') {
-        inlineEdit(btn.closest('.card'));
-      }
-    });
-
-    cancelBtn.addEventListener('click', () => {
-      modal.classList.remove('open');
-      deleteId = null;
-    });
-
-    confirmBtn.addEventListener('click', () => {
-      // TODO: await firebaseAPI.deleteSpot(deleteId);
-      document.querySelector(`.card[data-id="${deleteId}"]`).remove();
-      allSpots = allSpots.filter(s => s.id != deleteId);
-      modal.classList.remove('open');
-      showToast('Spot deleted');
-    });
-
-    // === inline edit ===
-    function inlineEdit(card) {
-      const header = card.querySelector('.card__header');
-      const oldText = header.textContent;
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = oldText;
-      header.replaceWith(input);
-
-      const actions = card.querySelector('.card__actions');
-      actions.innerHTML = `
-        <button class="btn-secondary" data-action="cancel">Cancel</button>
-        <button class="btn-secondary" data-action="save">Save</button>
-      `;
-      actions.addEventListener('click', e => {
-        const act = e.target.dataset.action;
-        if (act === 'cancel') {
-          input.replaceWith(header);
-          actions.innerHTML = `
-            <button class="btn-secondary" data-action="edit">Edit</button>
-            <button class="btn-secondary" data-action="delete">Delete</button>
-          `;
-        }
-        if (act === 'save') {
-          const newName = input.value.trim() || oldText;
-          // TODO: await firebaseAPI.updateSpot({id: card.dataset.id, name: newName});
-          header.textContent = newName;
-          input.replaceWith(header);
-          actions.innerHTML = `
-            <button class="btn-secondary" data-action="edit">Edit</button>
-            <button class="btn-secondary" data-action="delete">Delete</button>
-          `;
-          showToast('Spot updated');
-        }
-      }, { once: true });
-    }
-
-    // === toast ===
-    function showToast(msg) {
-      const t = document.createElement('div');
-      t.className = 'toast';
-      t.textContent = msg;
-      document.getElementById('toast-container').appendChild(t);
-      setTimeout(() => t.remove(), 3000);
-    }
-
-    init(); */
   </script>
 </body>
 </html>

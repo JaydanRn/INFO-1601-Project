@@ -8,6 +8,20 @@
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/components.css"/>
   <script type="module" src="details.js" defer></script>
+  <style>
+    .comments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+    }
+    
+    .comment-count {
+      font-size: 0.9rem;
+      color: var(--clr-neutral-dark);
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body class="home-bg">
   <!-- HEADER -->
@@ -82,7 +96,10 @@
 
       <!-- Comments Section -->
       <div class="comments-section">
-        <h2 class="comments-title">Comments</h2>
+        <div class="comments-header">
+          <h2 class="comments-title">Comments</h2>
+          <span class="comment-count" id="comment-count">0 Comments</span>
+        </div>
         
         <!-- Comment Form -->
         <form class="comment-form" id="comment-form">
@@ -96,6 +113,10 @@
         </div>
       </div>
     </div>
+
+    <!-- TOASTS -->
+  <div id="toast-container" class="toast-container"></div>
+
   </main>
 
   <script type="module">
