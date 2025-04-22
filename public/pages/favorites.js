@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
@@ -39,7 +39,7 @@ async function fetchFavorites(userId) {
       const spotIds = Object.keys(spots).filter((spotId) => spots[spotId]);
 
       if (spotIds.length === 0) {
-        listEl.innerHTML = "<p style='color:#666;'>You haven’t favorited any spots yet.</p>";
+        listEl.innerHTML = "<p style='color:#666;'>You haven't favorited any spots yet.</p>";
         return;
       }
 
@@ -70,7 +70,7 @@ async function fetchFavorites(userId) {
         }
       }
     } else {
-      listEl.innerHTML = "<p style='color:#666;'>You haven’t favorited any spots yet.</p>";
+      listEl.innerHTML = "<p style='color:#666;'>You haven't favorited any spots yet.</p>";
     }
   } catch (error) {
     console.error("Error fetching favorites:", error);
@@ -98,12 +98,30 @@ async function removeFavorite(userId, spotId) {
   }
 }
 
+// Handle logout
+function setupLogout() {
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        // Prevent back navigation after logout
+        window.location.replace('../pages/login.html');
+      } catch (error) {
+        console.error("Error signing out:", error);
+        alert("Failed to log out. Please try again.");
+      }
+    });
+  }
+}
+
 // Check if the user is logged in and fetch their favorites
 onAuthStateChanged(auth, (user) => {
   if (user) {
     showSkeletons(); // Show skeletons while loading
     fetchFavorites(user.uid);
+    setupLogout(); // Initialize logout functionality
   } else {
-    document.getElementById("favorites-list").innerHTML = "<p style='color:#666;'>You must be logged in to view your favorites.</p>";
+    document.getElementById("favorites-list").innerHTML = "<p style='color:#666;'>You must be logged in to view your favorites.</p>"; 
   }
 });

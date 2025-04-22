@@ -9,6 +9,18 @@
   <link rel="stylesheet" href="../css/components.css"/>
   <script type="module" src="create.js" defer></script>
 </head>
+
+<style>
+  .toast-error {
+    background-color: #ff4444;
+    color: white;
+  }
+  .btn-disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+</style>
+
 <body>
   <!-- HEADER -->
   <header class="ds-header">
@@ -139,12 +151,14 @@
     document.addEventListener('click', () => {
       profileWrap.classList.remove('profile-dropdown--open');
     });
-    document.getElementById('logout-btn').addEventListener('click', () => {
+
+
+  /*  document.getElementById('logout-btn').addEventListener('click', () => {
       window.location.href = 'login.html';
     });
 
     // File picker + preview
-    /*const fileInput  = document.getElementById('spot-image');
+    const fileInput  = document.getElementById('spot-image');
     const triggerBtn = document.getElementById('trigger-file');
     const previewImg = document.getElementById('preview');
     triggerBtn.addEventListener('click', () => fileInput.click());

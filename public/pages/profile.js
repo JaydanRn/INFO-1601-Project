@@ -1,6 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  updateDoc 
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
@@ -16,8 +25,35 @@ const postsCountEl = document.getElementById("posts-count");
 const favoritesCountEl = document.getElementById("favorites-count");
 const commentsCountEl = document.getElementById("comments-count");
 const editProfileBtn = document.getElementById("edit-profile");
+const logoutBtn = document.getElementById("logout-btn");
 
-// Fetch and Display User Information
+// === Authentication Functions ===
+function setupLogout() {
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showToast("Successfully logged out");
+        // Redirect after successful logout
+        window.location.href = '../pages/login.html';
+      } catch (error) {
+        console.error("Error signing out:", error);
+        showToast("Failed to log out", true);
+      }
+    });
+  }
+}
+
+// === Toast Function ===
+function showToast(message, isError = false) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${isError ? 'toast-error' : ''}`;
+  toast.textContent = message;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// === Profile Data Functions ===
 async function fetchUserProfile(userId) {
   try {
     const userDocRef = doc(db, "users", userId);
@@ -30,15 +66,13 @@ async function fetchUserProfile(userId) {
       profileCreatedEl.textContent = userData.createdAt
         ? new Date(userData.createdAt.toDate()).toLocaleDateString()
         : "Unknown";
-    } else {
-      console.error("User document does not exist.");
     }
   } catch (error) {
     console.error("Error fetching user profile:", error);
+    showToast("Failed to load profile", true);
   }
 }
 
-// Fetch and Count User's Spots
 async function fetchUserSpots(userId) {
   try {
     const spotsRef = collection(db, "spots");
@@ -47,10 +81,10 @@ async function fetchUserSpots(userId) {
     postsCountEl.textContent = querySnapshot.size;
   } catch (error) {
     console.error("Error fetching user spots:", error);
+    showToast("Failed to load spots", true);
   }
 }
 
-// Fetch and Count User's Favorites
 async function fetchUserFavorites(userId) {
   try {
     const favoritesDocRef = doc(db, "favorites", userId);
@@ -65,17 +99,16 @@ async function fetchUserFavorites(userId) {
     }
   } catch (error) {
     console.error("Error fetching user favorites:", error);
+    showToast("Failed to load favorites", true);
   }
 }
 
-// Fetch and Count User's Comments
 async function fetchUserComments(userId) {
   try {
     const commentsRef = collection(db, "comments");
     const querySnapshot = await getDocs(commentsRef);
 
     let totalComments = 0;
-
     querySnapshot.forEach((doc) => {
       const commentsData = doc.data().comments || {};
       Object.values(commentsData).forEach((comment) => {
@@ -88,25 +121,22 @@ async function fetchUserComments(userId) {
     commentsCountEl.textContent = totalComments;
   } catch (error) {
     console.error("Error fetching user comments:", error);
+    showToast("Failed to load comments", true);
   }
 }
 
-// Edit Profile Functionality (Username only)
+// === Edit Profile Function ===
 function setupEditProfile(userId) {
   editProfileBtn.addEventListener("click", () => {
     const currentName = profileNameEl.textContent;
-
-    // Create input field for username only
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.value = currentName;
     nameInput.className = "profile-edit-input";
     nameInput.placeholder = "Enter new username";
 
-    // Replace name with input
     profileNameEl.replaceWith(nameInput);
 
-    // Create save/cancel buttons
     const buttonContainer = document.createElement("div");
     buttonContainer.className = "profile-edit-buttons";
 
@@ -120,15 +150,13 @@ function setupEditProfile(userId) {
 
     buttonContainer.appendChild(saveBtn);
     buttonContainer.appendChild(cancelBtn);
-    
     editProfileBtn.replaceWith(buttonContainer);
 
-    // Save handler
     saveBtn.addEventListener("click", async () => {
       const newName = nameInput.value.trim();
 
       if (!newName) {
-        alert("Username cannot be empty");
+        showToast("Username cannot be empty", true);
         return;
       }
 
@@ -137,19 +165,16 @@ function setupEditProfile(userId) {
           username: newName
         });
 
-        // Update UI
         profileNameEl.textContent = newName;
         nameInput.replaceWith(profileNameEl);
         buttonContainer.replaceWith(editProfileBtn);
-
         showToast("Username updated successfully!");
       } catch (error) {
         console.error("Error updating username:", error);
-        alert("Failed to update username. Please try again.");
+        showToast("Failed to update username", true);
       }
     });
 
-    // Cancel handler
     cancelBtn.addEventListener("click", () => {
       nameInput.replaceWith(profileNameEl);
       buttonContainer.replaceWith(editProfileBtn);
@@ -157,9 +182,10 @@ function setupEditProfile(userId) {
   });
 }
 
-// Initialize Profile Page
+// === Initialize Page ===
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    setupLogout();
     const userId = user.uid;
     fetchUserProfile(userId);
     fetchUserSpots(userId);
@@ -167,15 +193,7 @@ onAuthStateChanged(auth, (user) => {
     fetchUserComments(userId);
     setupEditProfile(userId);
   } else {
-    window.location.href = "login.html";
+    alert("You need to log in to view this page.");
+    window.location.href = '../pages/login.html';
   }
 });
-
-// === Toast ===
-function showToast(msg) {
-  const t = document.createElement("div");
-  t.className = "toast";
-  t.textContent = msg;
-  document.getElementById("toast-container").appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}

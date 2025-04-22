@@ -10,7 +10,7 @@ import {
   updateDoc,
   deleteField
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
@@ -27,22 +27,54 @@ let deleteId = null;
 const modal = document.getElementById("delete-modal");
 const cancelBtn = document.getElementById("cancel-delete");
 const confirmBtn = document.getElementById("confirm-delete");
+const logoutBtn = document.getElementById("logout-btn");
 
-// Fetch spots posted by the logged-in user
-async function fetchSpots(userId) {
-  const spotsRef = collection(db, "spots");
-  const q = query(spotsRef, where("user", "==", userId));
-  const querySnapshot = await getDocs(q);
-
-  const spots = [];
-  querySnapshot.forEach((doc) => {
-    spots.push({ id: doc.id, ...doc.data() });
-  });
-
-  return spots;
+// === Authentication Functions ===
+function setupLogout() {
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showToast("Successfully logged out");
+        // Redirect after successful logout
+        window.location.href = '../pages/login.html';
+      } catch (error) {
+        console.error("Error signing out:", error);
+        showToast("Failed to log out", true);
+      }
+    });
+  }
 }
 
-// Render spots on the page
+// === Toast Function ===
+function showToast(message, isError = false) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${isError ? 'toast-error' : ''}`;
+  toast.textContent = message;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// === Spot Management Functions ===
+async function fetchSpots(userId) {
+  try {
+    const spotsRef = collection(db, "spots");
+    const q = query(spotsRef, where("user", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    const spots = [];
+    querySnapshot.forEach((doc) => {
+      spots.push({ id: doc.id, ...doc.data() });
+    });
+
+    return spots;
+  } catch (error) {
+    console.error("Error fetching spots:", error);
+    showToast("Failed to load spots", true);
+    return [];
+  }
+}
+
 function renderPage() {
   const listEl = document.getElementById("spots-list");
   const emptyState = document.getElementById("empty-state");
@@ -86,8 +118,7 @@ function renderPage() {
   }
 }
 
-// Delete spot and all associated data
-async function deleteSpotAndAssociatedData(spotId, userId) {
+async function deleteSpotAndAssociatedData(spotId) {
   try {
     // 1. Delete the spot document
     await deleteDoc(doc(db, "spots", spotId));
@@ -119,7 +150,7 @@ async function deleteSpotAndAssociatedData(spotId, userId) {
   }
 }
 
-// Handle delete button clicks
+// === Event Listeners ===
 document.getElementById("spots-list").addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
@@ -137,16 +168,15 @@ document.getElementById("spots-list").addEventListener("click", (e) => {
   }
 });
 
-// Handle delete confirmation
 confirmBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
   if (!user) {
-    alert("You must be logged in to delete spots.");
+    showToast("You must be logged in to delete spots", true);
     return;
   }
 
   try {
-    const success = await deleteSpotAndAssociatedData(deleteId, user.uid);
+    const success = await deleteSpotAndAssociatedData(deleteId);
     
     if (success) {
       // Update local state
@@ -164,21 +194,25 @@ confirmBtn.addEventListener("click", async () => {
         renderPage();
       }
     } else {
-      alert("Failed to completely delete spot data. Please try again.");
+      showToast("Failed to completely delete spot data", true);
     }
   } catch (error) {
     console.error("Error during deletion:", error);
-    alert("An error occurred during deletion. Please try again.");
+    showToast("An error occurred during deletion", true);
   }
 });
 
-// Cancel delete
 cancelBtn.addEventListener("click", () => {
   modal.classList.remove("open");
   deleteId = null;
 });
 
-// Inline edit functionality
+document.getElementById("load-more").addEventListener("click", () => {
+  currentPage++;
+  renderPage();
+});
+
+// === Helper Functions ===
 function inlineEdit(card) {
   const header = card.querySelector(".card__header");
   const oldText = header.textContent;
@@ -215,34 +249,21 @@ function inlineEdit(card) {
         showToast("Spot updated");
       } catch (error) {
         console.error("Error updating spot:", error);
-        alert("Failed to update spot. Please try again.");
+        showToast("Failed to update spot", true);
       }
     }
   }, { once: true });
 }
 
-// Load more spots
-document.getElementById("load-more").addEventListener("click", () => {
-  currentPage++;
-  renderPage();
-});
-
-// Toast notification
-function showToast(msg) {
-  const t = document.createElement("div");
-  t.className = "toast";
-  t.textContent = msg;
-  document.getElementById("toast-container").appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
-
-// Initialize the page
+// === Initialize Page ===
 onAuthStateChanged(auth, async (user) => {
+  setupLogout();
+  
   if (user) {
     allSpots = await fetchSpots(user.uid);
     renderPage();
   } else {
-    alert("You must be logged in to view your spots.");
-    window.location.href = "login.html";
+    document.getElementById("spots-list").innerHTML = "<p>Please log in to view your spots.</p>";
+    document.getElementById("load-more").style.display = "none";
   }
 });

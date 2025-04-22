@@ -72,10 +72,10 @@
       </div>
 
     </section>
-
-     <!-- TOASTS -->
-  <div id="toast-container" class="toast-container"></div>
   </main>
+
+  <!-- TOASTS -->
+  <div id="toast-container" class="toast-container"></div>
 
   <script type="module">
     // Sidebar toggle
@@ -96,9 +96,11 @@
     document.addEventListener('click', () => {
       profileWrap.classList.remove('profile-dropdown--open');
     });
-    document.getElementById('logout-btn').addEventListener('click', () => {
+
+
+   /* document.getElementById('logout-btn').addEventListener('click', () => {
       window.location.href = 'login.html';
-    });
+    }); */
 
     // TODO: Load real user data & spots via your API
   </script>

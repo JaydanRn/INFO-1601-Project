@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import firebaseConfig from "../firebaseConfig.js";
 
 // Initialize Firebase
@@ -12,7 +12,34 @@ const auth = getAuth(app);
 const urlParams = new URLSearchParams(window.location.search);
 const spotId = urlParams.get("spotId");
 
-// Fetch and display the spot details
+// === Authentication Functions ===
+function setupLogout() {
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showToast("Successfully logged out");
+        // Redirect after successful logout
+        window.location.href = '../pages/login.html'; 
+      } catch (error) {
+        console.error("Logout failed:", error);
+        showToast("Failed to log out", true);
+      }
+    });
+  }
+}
+
+// === Toast Function ===
+function showToast(message, isError = false) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${isError ? 'toast-error' : ''}`;
+  toast.textContent = message;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// === Spot Details Functions ===
 async function fetchSpotDetails() {
   if (!spotId) {
     document.querySelector(".spot-details").innerHTML = "<p>Invalid spot ID.</p>";
@@ -20,107 +47,67 @@ async function fetchSpotDetails() {
   }
 
   try {
-    // Fetch the spot document from Firestore
     const spotDoc = await getDoc(doc(db, "spots", spotId));
     if (spotDoc.exists()) {
-      const spotData = spotDoc.data();
-      displaySpotDetails(spotData);
+      displaySpotDetails(spotDoc.data());
     } else {
       document.querySelector(".spot-details").innerHTML = "<p>Spot not found.</p>";
     }
   } catch (error) {
     console.error("Error fetching spot details:", error);
-    document.querySelector(".spot-details").innerHTML = "<p>Failed to load spot details. Please try again later.</p>";
+    document.querySelector(".spot-details").innerHTML = "<p>Failed to load spot details.</p>";
   }
 }
 
-// Function to display the spot details in the placeholders
 function displaySpotDetails(spotData) {
-  // Update the spot name
   document.getElementById("spot-name").textContent = spotData.name || "Spot Name";
-
-  // Update the location
   document.getElementById("spot-location").textContent = spotData.location || "Location not available";
-
-  // Update the category
   document.getElementById("spot-category").textContent = spotData.category || "Category not available";
-
-  // Update the rating using the star system
-  const ratingElement = document.getElementById("spot-rating-display");
+  
   const rating = spotData.rating || 0;
-  ratingElement.innerHTML = "★".repeat(rating) + "☆".repeat(5 - rating);
-
-  // Update the description
+  document.getElementById("spot-rating-display").innerHTML = "★".repeat(rating) + "☆".repeat(5 - rating);
+  
   document.getElementById("spot-description").textContent = spotData.description || "No description available.";
 }
 
-// Add to Favorites
-async function addToFavorites(userId, spotId) {
+// === Favorites Functions ===
+async function addToFavorites(userId) {
   try {
     const userFavoritesRef = doc(db, "favorites", userId);
-
-    // Check if the user already has a favorites document
     const docSnapshot = await getDoc(userFavoritesRef);
+    
     if (docSnapshot.exists()) {
-      // Update the existing document by adding the spot ID
       await updateDoc(userFavoritesRef, {
         [`spots.${spotId}`]: true
       });
     } else {
-      // Create a new document with the spot ID
       await setDoc(userFavoritesRef, {
-        spots: {
-          [spotId]: true
-        }
+        spots: { [spotId]: true }
       });
     }
 
-    // Update the favorite button text dynamically
-    const favoriteText = document.getElementById("favorite-text");
-    favoriteText.textContent = "Added to Favorites!";
+    document.getElementById("favorite-text").textContent = "Added to Favorites!";
     showToast("Added to Favorites!");
   } catch (error) {
     console.error("Error adding to favorites:", error);
-    alert("Failed to add to favorites. Please try again.");
+    showToast("Failed to add to favorites", true);
   }
 }
 
-// Function to count and display comments
-async function displayCommentCount() {
-  try {
-    const commentsDoc = await getDoc(doc(db, "comments", spotId));
-    let commentCount = 0;
-    
-    if (commentsDoc.exists()) {
-      const commentsData = commentsDoc.data().comments || {};
-      commentCount = Object.keys(commentsData).length;
-    }
-    
-    // Update the comment count display
-    const commentCountElement = document.getElementById("comment-count");
-    commentCountElement.textContent = `${commentCount} ${commentCount === 1 ? 'Comment' : 'Comments'}`;
-    
-    return commentCount;
-  } catch (error) {
-    console.error("Error counting comments:", error);
-    return 0;
-  }
-}
-
-// Fetch and display comments for the spot
+// === Comments Functions ===
 async function fetchComments() {
   const commentsList = document.getElementById("comments-list");
   commentsList.innerHTML = "<p>Loading comments...</p>";
 
   try {
     const commentsDoc = await getDoc(doc(db, "comments", spotId));
-    const commentCount = await displayCommentCount(); // Update count
+    await displayCommentCount();
     
     if (commentsDoc.exists()) {
       const commentsData = commentsDoc.data().comments || {};
       commentsList.innerHTML = "";
 
-      Object.entries(commentsData).forEach(([commentId, comment]) => {
+      Object.entries(commentsData).forEach(([_, comment]) => {
         const commentEl = document.createElement("div");
         commentEl.classList.add("comment");
         commentEl.innerHTML = `
@@ -138,11 +125,10 @@ async function fetchComments() {
     }
   } catch (error) {
     console.error("Error fetching comments:", error);
-    commentsList.innerHTML = "<p>Failed to load comments. Please try again later.</p>";
+    commentsList.innerHTML = "<p>Failed to load comments.</p>";
   }
 }
 
-// Submit a new comment
 async function submitComment(event) {
   event.preventDefault();
 
@@ -150,14 +136,14 @@ async function submitComment(event) {
   const commentText = commentInput.value.trim();
 
   if (!commentText) {
-    showToast("Comment cannot be empty.");
+    showToast("Comment cannot be empty.", true);
     return;
   }
 
   try {
     const user = auth.currentUser;
     if (!user) {
-      alert("You must be logged in to submit a comment.");
+      showToast("Please log in to comment", true);
       return;
     }
 
@@ -174,39 +160,52 @@ async function submitComment(event) {
     });
 
     commentInput.value = "";
-    await fetchComments(); // This will also update the count
-    showToast("Comment submitted successfully!");
+    await fetchComments();
+    showToast("Comment submitted!");
   } catch (error) {
     console.error("Error submitting comment:", error);
-    alert("Failed to submit comment. Please try again.");
+    showToast("Failed to submit comment", true);
   }
 }
 
-// Handle the favorite button click
-document.getElementById("favorite-btn").addEventListener("click", () => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      addToFavorites(user.uid, spotId);
-    } else {
-      alert("You must be logged in to favorite a spot.");
-    }
-  });
-});
-
-// === Toast ===
-function showToast(msg) {
-  const t = document.createElement("div");
-  t.className = "toast";
-  t.textContent = msg;
-  document.getElementById("toast-container").appendChild(t);
-  setTimeout(() => t.remove(), 3000);
+async function displayCommentCount() {
+  try {
+    const commentsDoc = await getDoc(doc(db, "comments", spotId));
+    let count = commentsDoc.exists() ? Object.keys(commentsDoc.data().comments || {}).length : 0;
+    document.getElementById("comment-count").textContent = `${count} ${count === 1 ? 'Comment' : 'Comments'}`;
+  } catch (error) {
+    console.error("Error counting comments:", error);
+  }
 }
 
-// Attach event listener to the comment form
+// === Initialize Page ===
+function initializePage(user) {
+  // Enable/disable features based on auth state
+  const commentForm = document.getElementById("comment-form");
+  const favoriteBtn = document.getElementById("favorite-btn");
+  
+  if (!user) {
+    commentForm.style.opacity = "0.7";
+    favoriteBtn.disabled = true;
+  }
+}
+
+// Setup event listeners
+document.getElementById("favorite-btn").addEventListener("click", () => {
+  const user = auth.currentUser;
+  if (user) {
+    addToFavorites(user.uid);
+  } else {
+    showToast("Please log in to add favorites", true);
+  }
+});
+
 document.getElementById("comment-form").addEventListener("submit", submitComment);
 
-// Call the function to fetch and display spot details
-fetchSpotDetails();
-
-// Call the function to fetch and display comments
-fetchComments();
+// Main initialization
+onAuthStateChanged(auth, (user) => {
+  initializePage(user);
+  setupLogout();
+  fetchSpotDetails();
+  fetchComments();
+});

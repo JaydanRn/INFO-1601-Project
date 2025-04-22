@@ -1,7 +1,7 @@
 import firebaseConfig from "../firebaseConfig.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -26,9 +26,58 @@ function getRandomImage() {
   return DEMO_IMAGES[Math.floor(Math.random() * DEMO_IMAGES.length)];
 }
 
+// Toast notification
+function showToast(message, isError = false) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${isError ? 'toast-error' : ''}`;
+  toast.textContent = message;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// Setup logout functionality
+function setupLogout() {
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showToast("Logged out successfully");
+        window.location.href = '../pages/login.html';
+      } catch (error) {
+        console.error("Error signing out:", error);
+        showToast("Failed to log out", true);
+      }
+    });
+  }
+}
+
+// Check auth state and handle UI
+function handleAuthState(user) {
+  const form = document.getElementById("create-form");
+  const submitBtn = form.querySelector('button[type="submit"]');
+  
+  if (!user) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Please Log In to Add Spots";
+    submitBtn.classList.add('btn-disabled');
+    showToast("You need to log in to create spots", true);
+  } else {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Add Spot";
+    submitBtn.classList.remove('btn-disabled');
+  }
+}
+
 // Form submission
 document.getElementById("create-form").addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  const user = auth.currentUser;
+  if (!user) {
+    showToast("Please log in to create spots", true);
+    return;
+  }
 
   // Get form values
   const spotName = document.getElementById("spot-name").value.trim();
@@ -41,57 +90,47 @@ document.getElementById("create-form").addEventListener("submit", async (e) => {
 
   // Validate
   if (!spotName || !location || !embed || !description || !category || !rating) {
-    alert("Please fill all required fields");
+    showToast("Please fill all required fields", true);
     return;
   }
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      alert("You must be logged in to create spots");
-      return;
-    }
+  try {
+    const spotId = `${spotName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
+    const spotData = {
+      name: spotName,
+      location,
+      embed,
+      category,
+      rating: parseInt(rating),
+      description,
+      image: getRandomImage(),
+      createdAt: new Date(),
+      user: user.uid
+    };
 
-    try {
-      const spotId = `${spotName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
-      const spotData = {
-        name: spotName,
-        location,
-        embed,
-        category,
-        rating: parseInt(rating),
-        description,
-        image: getRandomImage(), // Assign random image
-        createdAt: new Date(),
-        user: user.uid
-      };
+    await setDoc(doc(db, "spots", spotId), spotData);
+    await setDoc(doc(db, "comments", spotId), { comments: {} });
 
-      await setDoc(doc(db, "spots", spotId), spotData);
-      await setDoc(doc(db, "comments", spotId), { comments: {} });
+    showToast("Spot created successfully!");
+    document.getElementById("create-form").reset();
+    
+    // Reset UI
+    document.querySelectorAll('.rating label').forEach(label => {
+      label.classList.remove('highlighted');
+    });
+    document.querySelectorAll('.category-pill').forEach(pill => {
+      pill.classList.remove('category-pill--active');
+    });
+    document.getElementById('custom-category-input').style.display = 'none';
 
-      showToast("Spot created successfully!");
-      document.getElementById("create-form").reset();
-      
-      // Reset UI
-      document.querySelectorAll('.rating label').forEach(label => {
-        label.classList.remove('highlighted');
-      });
-      document.querySelectorAll('.category-pill').forEach(pill => {
-        pill.classList.remove('category-pill--active');
-      });
-      document.getElementById('custom-category-input').style.display = 'none';
-
-    } catch (error) {
-      console.error("Error creating spot:", error);
-      showToast("Failed to create spot");
-    }
-  });
+  } catch (error) {
+    console.error("Error creating spot:", error);
+    showToast("Failed to create spot", true);
+  }
 });
 
-// Toast notification
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.textContent = message;
-  document.getElementById("toast-container").appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
+// Initialize the page
+onAuthStateChanged(auth, (user) => {
+  handleAuthState(user);
+  setupLogout();
+});
