@@ -36,7 +36,6 @@ function setupLogout() {
       try {
         await signOut(auth);
         showToast("Successfully logged out");
-        // Redirect after successful logout
         window.location.href = '../pages/login.html';
       } catch (error) {
         console.error("Error signing out:", error);
@@ -75,11 +74,14 @@ async function fetchSpots(userId) {
   }
 }
 
-function renderPage() {
+function renderPage(append = false) {
   const listEl = document.getElementById("spots-list");
   const emptyState = document.getElementById("empty-state");
   
-  listEl.innerHTML = "";
+  if (!append) {
+    listEl.innerHTML = "";
+    currentPage = 0; // Reset to first page when not appending
+  }
   
   if (allSpots.length === 0) {
     emptyState.style.display = "block";
@@ -111,6 +113,7 @@ function renderPage() {
     listEl.appendChild(card);
   });
 
+  // Update load more button visibility
   if ((currentPage + 1) * perPage >= allSpots.length) {
     document.getElementById("load-more").style.display = "none";
   } else {
@@ -207,9 +210,10 @@ cancelBtn.addEventListener("click", () => {
   deleteId = null;
 });
 
-document.getElementById("load-more").addEventListener("click", () => {
+document.getElementById("load-more").addEventListener("click", (e) => {
+  e.preventDefault();
   currentPage++;
-  renderPage();
+  renderPage(true); // Append new spots
 });
 
 // === Helper Functions ===

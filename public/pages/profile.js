@@ -193,7 +193,7 @@ onAuthStateChanged(auth, (user) => {
     fetchUserComments(userId);
     setupEditProfile(userId);
   } else {
-    alert("You need to log in to view this page.");
+    alert("Logged out.");
     window.location.href = '../pages/login.html';
   }
 });

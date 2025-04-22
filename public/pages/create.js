@@ -13,7 +13,7 @@ const DEMO_IMAGES = [
   '../assets/img/burger.jpg',
   '../assets/img/cake.jpg',
   '../assets/img/chicken.jpg',
-  '../assets/img/roti.jpg',
+  '../assets/img/roti.jpeg',
   '../assets/img/bake.jpg',
   '../assets/img/doubles.jpg',
   '../assets/img/pie.jpg',

@@ -107,5 +107,20 @@ document.getElementById("search-btn").addEventListener("click", async () => {
   }
 });
 
+
+    // Handle logout
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          await signOut(auth);
+          // Redirect to login page without keeping history
+          window.location.href = '../pages/login.html';
+        } catch (error) {
+          console.error("Logout failed:", error);
+          alert("Failed to log out. Please try again.");
+        }
+      });
+    }
+
 // Initialize
 fetchSpots();
